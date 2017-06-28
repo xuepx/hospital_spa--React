@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>确认缴费</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    ul{background-color: #FFFFFF;margin-bottom: .2rem}
+    li{border-bottom: 1px solid #e5e5e5;padding: 0 .26rem;overflow: hidden}
+    li p{font-size: 16px;line-height: .88rem;float: left}
+    .gray{color: #888888}
+    .red{color: #f45306}
+    input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 4rem}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{price:null}},inputPrice:function(e){isNaN(Number(e.target.value))||this.setState({price:e.target.value})},recharge:function(){var _this=this;/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^[0-9]\.[0-9]([0-9])?$)/.test(this.state.price)?$Ajax("zhuYuanChongZhiTiJiao",{org:localStorage.getItem("org"),inpatientno:$.urlObj.patientNo,patientId:$.urlObj.patientId,payPrice:_this.state.price},function(data){location.replace($.reqHost+"/hrwgzyy/rest/jiaofei?merBillNo="+data.obj.MerBillNo+"&productName=住院预缴&price="+_this.state.price+"&payAccount="+$.urlObj.patientId)}):alert("请输入正确充值金额")},render:function(){return React.createElement("div",{className:"body-wrap"},React.createElement("ul",null,React.createElement("li",null,React.createElement("p",null,"可用余额："),React.createElement("p",{className:"red"},"￥",$.urlObj.balance)),React.createElement("li",null,React.createElement("p",null,"住院预缴金额："),React.createElement("input",{placeholder:"请输入预缴金额",value:this.state.price,onChange:this.inputPrice}))),React.createElement("a",{href:"javascript:;",className:"submit",onClick:this.recharge},"确认"),React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

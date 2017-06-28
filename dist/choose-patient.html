@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>选择就诊人</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    ul{background-color: #FFFFFF;}
+    li p{line-height: .88rem;border-bottom: 1px solid #e5e5e5;padding:0 .26rem;font-size: 16px}
+    li span{display: block;width: .4rem;height: .4rem;float: right;margin-top: .24rem;/*background:url("img/true.png")no-repeat center;background-size: 100%*/}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{person:[]}},componentWillMount:function(){var _this=this;$Ajax("chaxunJiuzhenrenXinxi",{context:$.type,openId:$.openId},function(data){_this.setState({person:data.obj})})},pageGo:function(i,name,sourceId,pmid){var detail=this.state.person[i];"orderDetail"==$.urlObj.from?(localStorage.setItem("temporary-name",name),localStorage.setItem("temporary-sourceId",sourceId),localStorage.setItem("temporary-pmid",pmid),history.go(-1)):"outpatientsPay"==$.urlObj.from?$Go("./outpatients-pay.html?"+$Param({cardNo:detail.cardNo,sourceId:detail.sourceId,name:detail.name})):"orderRecord"==$.urlObj.from?$Go("./order-record.html?"+$Param({sourceId:detail.sourceId,name:detail.name})):"payRecord"==$.urlObj.from?$Go("./pay-record.html?"+$Param({sourceId:detail.sourceId,name:detail.name,cardNo:detail.cardNo})):"queryReport"==$.urlObj.from?$Go("./query-report.html?"+$Param({sourceId:detail.sourceId,name:detail.name})):$Go("./patient-detail.html?"+$Param({id:detail.id,cardNo:detail.cardNo,idNo:detail.idNo,phone:detail.phone,gender:detail.gender,name:detail.name,birthday:detail.birthday}))},render:function(){for(var items=[],person=this.state.person,i=0;i<person.length;i++)items.push(React.createElement("li",{key:i,onClick:this.pageGo.bind(this,i,person[i].name,person[i].sourceId,person[i].pmid)},React.createElement("p",null,person[i].name,React.createElement("span",null))));return React.createElement("div",{className:"body-wrap"},React.createElement("ul",null,React.createElement("li",null,items)),React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

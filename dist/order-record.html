@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>挂号记录</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    body{padding-top: .2rem;}
+    #patient{margin: 0 .26rem .2rem;background:url("../img/next.png")no-repeat right .2rem center #FFFFFF;background-size: auto .3rem;}
+    #patient p{float: left;line-height: 1rem;font-size: 16px;padding-left: .82rem;background: url("../img/card.png")no-repeat left .22rem center;background-size:.43rem auto;}
+    #patient span{display: block;float: left;font-size: 16px;color: #3f9ff3;line-height: 1rem}
+    table{width:100%;border-collapse:collapse;position: absolute;bottom: 1rem;top: 2.3rem;display: block;overflow: auto}
+    #title li{float: left;width: 25%;text-align: center;line-height: .9rem;color:#3f9ff3;background-color: #FFFFFF;border-top: 1px solid #e5e5e5}
+    tr{display:block;border-top: 1px solid #e5e5e5;width: 100%;background-color: #FFFFFF;}
+    tr:nth-last-child(1){border-bottom: 1px solid #e5e5e5}
+    td{display:block;float:left;width: 25%;text-align: center;line-height: .9rem;}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{orderList:[]}},componentWillMount:function(){var _this=this;$Ajax("chaxunYuyueGuahaoJilu",{org:localStorage.getItem("org"),patientId:$.urlObj.sourceId,startDate:"",endDate:""},function(data){_this.setState({orderList:$Fuck(data.obj.dataset.row)})})},choosePatient:function(){history.go(-1)},render:function(){for(var items=[],list=this.state.orderList,i=0;i<list.length;i++)items.push(React.createElement("tr",{className:"clearfix"},React.createElement("td",{style:{margin:".225rem 0",lineHeight:".45rem"}},list[i].sectionName),React.createElement("td",null,list[i].regDateTime),React.createElement("td",null,Number(list[i].regFee)+Number(list[i].clinicFee)),React.createElement("td",null,list[i].drName)));return React.createElement("div",{className:"body-wrap"},React.createElement("div",{id:"patient",className:"clearfix",onClick:this.choosePatient},React.createElement("p",null,"就诊人："),React.createElement("span",null,$.urlObj.name)),React.createElement("ul",{id:"title",className:"clearfix"},React.createElement("li",null,"科室"),React.createElement("li",null,"就诊时间"),React.createElement("li",null,"价格"),React.createElement("li",null,"医生")),React.createElement("table",null,items),React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

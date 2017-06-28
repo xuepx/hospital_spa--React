@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>选择就诊人</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    ul{background-color: #FFFFFF;}
+    li p{line-height: .88rem;border-bottom: 1px solid #e5e5e5;padding:0 .26rem;font-size: 16px}
+    li span{display: block;width: .4rem;height: .4rem;float: right;margin-top: .24rem;/*background:url("img/true.png")no-repeat center;background-size: 100%*/}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/babel.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/common.js"></script>
+<script src="js/react.js"></script>
+<script src="js/react-dom.js"></script>
+<script  type="text/babel">
+    var Main = React.createClass({
+        getInitialState: function() {
+            return {
+                person:[]
+            }
+        },
+        componentWillMount:function(){
+            var _this=this;
+            $Ajax('chaxunJiuzhenrenXinxi',{
+                context:$.type,
+                openId:$.openId
+            },function(data){
+                _this.setState({person:data.obj})
+            })
+        },
+        pageGo:function(i,name,sourceId,pmid){
+            var detail = this.state.person[i];
+            if($.urlObj.from=='orderDetail'){
+                localStorage.setItem('temporary-name',name);
+                localStorage.setItem('temporary-sourceId',sourceId);
+                localStorage.setItem('temporary-pmid',pmid);
+                history.go(-1)
+            }else if($.urlObj.from=='outpatientsPay'){
+                $Go('./outpatients-pay.html?'+
+                    $Param({
+                        cardNo:detail.cardNo,
+                        sourceId:detail.sourceId,
+                        name:detail.name
+                    })
+                )
+            }else if($.urlObj.from=='orderRecord'){
+                $Go('./order-record.html?'+
+                    $Param({
+                        sourceId:detail.sourceId,
+                        name:detail.name
+                    })
+                )
+            }else if($.urlObj.from=='payRecord'){
+                $Go('./pay-record.html?'+
+                    $Param({
+                        sourceId:detail.sourceId,
+                        name:detail.name,
+                        cardNo:detail.cardNo
+                    })
+                )
+            }else if($.urlObj.from=='queryReport'){
+                $Go('./query-report.html?'+
+                    $Param({
+                        sourceId:detail.sourceId,
+                        name:detail.name,
+                    })
+                )
+            }else {
+                $Go('./patient-detail.html?'+
+                    $Param({
+                        id:detail.id,
+                        cardNo:detail.cardNo,
+                        idNo:detail.idNo,
+                        phone:detail.phone,
+                        gender:detail.gender,
+                        name:detail.name,
+                        birthday:detail.birthday
+                    })
+                )
+            }
+        },
+        render: function() {
+            var items=[],person=this.state.person;
+            for(var i=0;i<person.length;i++){
+                items.push(
+                    <li key={i} onClick={this.pageGo.bind(this,i,person[i].name,person[i].sourceId,person[i].pmid)}>
+                        <p>{person[i].name}<span></span></p>
+                    </li>
+                )
+            }
+            return (<div className="body-wrap">
+                <ul>
+                    <li>
+                        {items}
+                    </li>
+                </ul>
+
+                <footer>
+                    <p>Copyright © 2016 医依帮 www.yiebang.cn</p>
+                    <p>巫山县人民医院&医依帮技术支持</p>
+                </footer>
+            </div>)
+        }
+    });
+
+    ReactDOM.render(
+        <Main />,
+        document.getElementById('main')
+    );
+</script>

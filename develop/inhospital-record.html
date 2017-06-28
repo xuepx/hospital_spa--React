@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>住院清单查询</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    body{padding-top: .2rem;overflow: auto}
+    li{border-top:1px solid #e5e5e5;}
+    h2{line-height: .88rem;font-size: 16px;background-color:#FFFFFF;font-weight: 500;padding:0 .26rem}
+    #wrap{position: absolute;top: 3.3rem;bottom:1rem;width:100%;overflow: auto}
+    table{width: 100%;border-collapse:collapse;display: block;background-color: #FFFFFF}
+    .title li{background-color: #3F9FF3;color: #FFFFFF;float: left;text-align: center;line-height: .9rem;width: 25%}
+    tr{width: 100%;display: block;overflow: hidden;border-bottom:1px solid #e5e5e5;}
+    td{text-align: center;line-height: .88rem;width: 25%;display: block;float: left}
+    .price{color: #f45306}
+    #number{background-color: #FFFFFF;border:1px solid #e5e5e5;margin:.2rem 2rem .2rem .26rem;padding-left: .26rem;position: relative}
+    #number p{line-height: .9rem;float: left;font-size: 16px;}
+    input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 3rem}
+    #submit{position:absolute;top:.1rem;right:-1.65rem;border-radius:4px;line-height: .7rem;font-size: 16px;text-align: center;width: 1.3rem;background-color: #3F9FF3;color: #FFFFFF}
+    #detail-wrap{display: none}
+    #detail-wrap.active{display: block}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/babel.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/common.js"></script>
+<script src="js/react.js"></script>
+<script src="js/react-dom.js"></script>
+<script  type="text/babel">
+    var Main = React.createClass({
+        getInitialState: function() {
+            return {
+                Act:'',
+                inHospitalNo:'',
+                payList:{
+                    row:[],
+                    hosSection:'',
+                    patientName:'',
+                    patientGender:'',
+                    age:''
+                },
+            }
+        },
+        inputCode:function(e){
+            this.setState({inHospitalNo:e.target.value})
+        },
+        submit:function(){
+            var _this=this;
+            $Ajax('getZhuyuanQingdanList',{
+                org : localStorage.getItem('org'),
+                inHospitalNo : this.state.inHospitalNo,
+                startDate : '',
+                endDate : ''
+            },function(data){
+                data.obj.dataset.hosSection=data.obj.hosSection;
+                data.obj.dataset.patientName=data.obj.patientName;
+                data.obj.dataset.patientGender=data.obj.patientGender;
+                data.obj.dataset.age=data.obj.age;
+                _this.setState({payList:data.obj.dataset,Act:'active'})
+            })
+        },
+        render: function() {
+            var items=[],list=this.state.payList;
+            for(var i=0;i<list.row.length;i++){
+                items.push(
+                    <tr>
+                        <td style={{width:'30%'}}>{list.row[i].itemDateTime.split(' ')[0]}<br/>{list.row[i].itemDateTime.split(' ')[1]}</td>
+                        <td style={{width:'30%'}}>{list.row[i].itemName}</td>
+                        <td style={{width:'15%'}}>{list.row[i].itemNum}</td>
+                        <td className="price">￥{list.row[i].itemPrice}</td>
+                    </tr>
+                )
+            }
+            return (<div class="body-wrap">
+                <div id="number" className="clearfix">
+                    <p>住院号：</p>
+                    <input placeholder="请输入住院号" onChange={this.inputCode} />
+                    <a href="javascript:;" id="submit" onClick={this.submit}>提交</a>
+                </div>
+
+                <div className={this.state.Act} id="detail-wrap">
+                    <h2>{list.hosSection}：{list.patientName}<span style={{float:'right'}}>{list.patientGender}，{list.age}</span></h2>
+                    <ul className="title clearfix">
+                        <li style={{width:'30%'}}>缴费日期</li>
+                        <li style={{width:'30%'}}>类目名称</li>
+                        <li style={{width:'15%'}}>数量</li>
+                        <li>总金额</li>
+                    </ul>
+
+                    <div id="wrap">
+                        <table className="clearfix">
+                            {items}
+                        </table>
+
+                        <div id="tip">
+                            <p>如需纸质费用清单，请到收费处或自助打印设备进行打印</p>
+                        </div>
+                    </div>
+                </div>
+
+                <footer>
+                    <p>Copyright © 2016 医依帮 www.yiebang.cn</p>
+                    <p>巫山县人民医院&医依帮技术支持</p>
+                </footer>
+            </div>)
+        }
+    });
+
+    ReactDOM.render(
+            <Main />,
+            document.getElementById('main')
+    );
+</script>

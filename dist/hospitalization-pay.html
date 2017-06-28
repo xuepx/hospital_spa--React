@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>住院预缴</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    #area{top: 0;margin-left: .27rem;width:6.96rem;z-index: 1}
+    #area li{width: 3.48rem;background-color: #FFFFFF;line-height: 1rem;font-size: 18px;text-align: center;float: left;white-space: nowrap;overflow: hidden;text-overflow :ellipsis}
+    #area li.active{background-color: #78c3e9;color: #FFFFFF}
+    #number{background-color: #FFFFFF;border:1px solid #e5e5e5;margin: .2rem .26rem;padding-left: .26rem}
+    #number p{line-height: .9rem;float: left;font-size: 16px;}
+    input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 4.6rem}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{areaName:["谭晶路院区","凤凰山院区","后湖院区"],Act:["","",""],payList:[],inHospitalNo:null}},componentWillMount:function(){for(var i=0;i<this.state.areaName.length;i++)localStorage.getItem("orgName")==this.state.areaName[i]&&(this.state.Act[i]="active",this.setState({Act:this.state.Act}))},changeArea:function(i,org,name){var arr=["","",""];arr[i]="active",this.setState({Act:arr}),localStorage.setItem("org",org),localStorage.setItem("orgName",name)},inputCode:function(e){this.setState({inHospitalNo:e.target.value})},queryNo:function(){var _this=this;this.state.inHospitalNo?$Ajax("huoquZhuyuanXinxi",{org:localStorage.getItem("org"),inHospitalNo:this.state.inHospitalNo},function(data){var obj=data.obj.dataset.row;$Go("./confirm-patient.html?"+$Param({patientNo:_this.state.inHospitalNo,patientId:obj.patientId,name:obj.patientName,sex:obj.patientGender,age:obj.age,departName:obj.hosSectionName,bedNo:obj.hosBedNo,hosNo:obj.inHospitalNo,idCardNo:obj.idCardNo,date:obj.inDate,balance:obj.hosBalance}))}):alert("请输入患者住院号")},render:function(){var area=this.state.areaName;return React.createElement("div",{className:"body-wrap"},React.createElement("ul",{id:"area",className:"clearfix"},React.createElement("li",{onClick:this.changeArea.bind(this,0,1,area[0]),className:this.state.Act[0]},area[0]),React.createElement("li",{onClick:this.changeArea.bind(this,1,2,area[1]),className:this.state.Act[1]},area[1]),React.createElement("li",{onClick:this.changeArea.bind(this,2,3,area[2]),className:this.state.Act[2]},area[2])),React.createElement("div",{id:"number",className:"clearfix"},React.createElement("p",null,"住院号："),React.createElement("input",{placeholder:"请输入住院号",onChange:this.inputCode,value:this.state.inHospitalNo})),React.createElement("div",{id:"tip"},React.createElement("p",null,"输入住院号查询住院患者信息，确认信息正确后输入金额进行预缴住院金")),React.createElement("a",{href:"javascript:;",className:"submit",onClick:this.queryNo},"查询"),React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>选择科室</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    #area{width: 1.82rem;height: 100%;float: left;border-right:1px solid #e5e5e5 }
+    #area li{background-color: #FFFFFF;font-size: 16px;line-height: .5rem;text-align: center;border-bottom: 1px solid #e5e5e5;padding: .25rem 0}
+    #area li.active{background-color: #79C3E9;color: #FFFFFF;border: none}
+    #depart{width: 5.68rem;height: 100%;float: left;padding-left:.2rem;background: #FFFFFF;overflow: auto}
+    #depart-wrap{width: 100%;min-height: 100%;padding-bottom: 1.5rem;position: relative}
+    .depart-wrap{width: 100%;margin-bottom: .2rem}
+    .depart-wrap p{background-color: #f8f8f8;font-size: 16px;line-height: .9rem;padding-left: .26rem;width: 100%}
+    .depart-wrap li{margin: .1rem .1rem 0;line-height: .88rem;border-radius: 3px;text-align: center;font-size: 16px;color: #FFFFFF;background-color: #3F9FF3}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{areaName:["谭晶路院区","凤凰山院区","后湖院区"],Act:["active",""],bigDepartName:[]}},componentWillMount:function(){this.chooseArea(0,1,this.state.areaName[0])},chooseArea:function(i,org,name){var _this=this,arr=["",""];arr[i]="active",this.setState({Act:arr}),localStorage.setItem("org",org),localStorage.setItem("orgName",name),$Ajax("getYuyueKeshiList",{org:org},function(data){_this.setState({bigDepartName:$Fuck(data.obj.dataset.row)})})},chooseDepaet:function(i,id){var _this=this;$Ajax("getYuyueKeshiList",{org:localStorage.getItem("org"),sectionCode:id,deptType:""},function(data){var arr=_this.state.bigDepartName;arr[i].small=$Fuck(data.obj.dataset.row),_this.setState({bigDepartName:arr})})},render:function(){for(var items=[],Depart=this.state.bigDepartName,i=0;i<Depart.length;i++)items.push(React.createElement("div",{key:Depart[i].deptId,className:"depart-wrap"},React.createElement("p",{onClick:this.chooseDepaet.bind(this,i,Depart[i].deptId)},Depart[i].deptName),Depart[i].small&&React.createElement(DepartUl,{small:Depart[i].small})));var area=this.state.areaName;return React.createElement("div",{className:"body-wrap"},React.createElement("ul",{id:"area"},React.createElement("li",{onClick:this.chooseArea.bind(this,0,1,area[0]),className:this.state.Act[0]},area[0]),React.createElement("li",{onClick:this.chooseArea.bind(this,1,2,area[1]),className:this.state.Act[1]},area[1]),React.createElement("li",{onClick:this.chooseArea.bind(this,2,3,area[2]),className:this.state.Act[2]},area[2])),React.createElement("div",{id:"depart"},React.createElement("div",{id:"depart-wrap"},items,React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))))}}),DepartUl=React.createClass({displayName:"DepartUl",pageGo:function(deptId){$Go("./day-order.html?"+$Param({deptId:deptId,org:localStorage.getItem("org")}))},render:function(){for(var items=[],smallDepart=this.props.small,i=0;i<smallDepart.length;i++)items.push(React.createElement("li",{key:smallDepart[i].deptId,onClick:this.pageGo.bind(this,smallDepart[i].deptId)},smallDepart[i].deptName));return React.createElement("ul",{className:"clearfix"},items)}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

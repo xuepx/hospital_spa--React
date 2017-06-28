@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>就诊人详情</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    ul{background-color: #FFFFFF;margin-bottom: .2rem}
+    li{border-bottom: 1px solid #e5e5e5;padding: 0 .26rem 0 .8rem;overflow: hidden;}
+    li:nth-last-child(1){background: url("../img/pl-6.png")no-repeat left .26rem center;background-size:.4rem auto}
+    li:nth-last-child(2){background: url("../img/pl-5.png")no-repeat left .26rem center;background-size:.4rem auto}
+    li:nth-last-child(3){background: url("../img/pl-4.png")no-repeat left .26rem center;background-size:.4rem auto}
+    li:nth-last-child(4){background: url("../img/pl-3.png")no-repeat left .26rem center;background-size:.4rem auto}
+    li:nth-last-child(5){background: url("../img/pl-2.png")no-repeat left .26rem center;background-size:.4rem auto}
+    /*li:nth-last-child(6){background: url("img/pl-1.png")no-repeat left .26rem center;background-size:.4rem auto}*/
+    li p{font-size: 16px;line-height: .88rem;float: left;}
+    #title{padding-left: .26rem;}
+    #title p{text-align: center;float: none;color: #3f9ff3}
+    .gray{color: #888888}
+    .red{color: #f45306}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/babel.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/common.js"></script>
+<script src="js/react.js"></script>
+<script src="js/react-dom.js"></script>
+<script  type="text/babel">
+    var Main = React.createClass({
+        deletePatient:function(){
+            if(confirm('确认删除“'+$.urlObj.name+'”就诊人？')){
+                $Ajax('shanchuJiuzhenren',{
+                    id:$.urlObj.id
+                },function(data){
+                    alert(data.msg)
+                    history.go(-1)
+                })
+            }
+        },
+        render: function() {
+            return (<div className="body-wrap">
+                <ul>
+                    <li id="title">
+                        <p>{$.urlObj.name}</p>
+                    </li>
+                    {/*<li>
+                        <p>住院号：</p>
+                        <p className="gray"></p>
+                    </li>*/}
+                    <li>
+                        <p>就诊卡号：</p>
+                        <p className="gray">{$.urlObj.cardNo}</p>
+                    </li>
+                    <li>
+                        <p>身份证号：</p>
+                        <p className="gray">{$.urlObj.idNo}</p>
+                    </li>
+                    <li>
+                        <p>联系电话：</p>
+                        <p className="gray">{$.urlObj.phone}</p>
+                    </li>
+                    <li>
+                        <p>性别：</p>
+                        <p className="gray">{$.urlObj.gender}</p>
+                    </li>
+                    <li>
+                        <p>出生日期：</p>
+                        <p className="gray">{$.urlObj.birthday}</p>
+                    </li>
+                </ul>
+
+                <a href="javascript:;" className="submit" onClick={this.deletePatient}>删除此就诊人</a>
+
+                <footer>
+                    <p>Copyright © 2016 医依帮 www.yiebang.cn</p>
+                    <p>巫山县人民医院&医依帮技术支持</p>
+                </footer>
+            </div>)
+        }
+    });
+
+    ReactDOM.render(
+            <Main />,
+            document.getElementById('main')
+    );
+</script>

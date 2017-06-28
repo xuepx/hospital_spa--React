@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>确认患者信息</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    ul{background-color: #FFFFFF;margin-bottom: .2rem}
+    li{border-bottom: 1px solid #e5e5e5;padding: 0 .26rem;overflow: hidden}
+    li p{font-size: 16px;line-height: .88rem;float: left}
+    .gray{color: #888888}
+    .red{color: #f45306}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",pageGo:function(){$Go("./input-price.html?"+$Param({patientId:$.urlObj.patientId,patientNo:$.urlObj.patientNo,balance:$.urlObj.balance}))},render:function(){return React.createElement("div",{className:"body-wrap"},React.createElement("ul",null,React.createElement("li",null,React.createElement("p",null,"院区："),React.createElement("p",{className:"gray"},localStorage.getItem("orgName"))),React.createElement("li",null,React.createElement("p",null,"姓名："),React.createElement("p",{className:"red"},$.urlObj.name)),React.createElement("li",null,React.createElement("p",null,"性别："),React.createElement("p",{className:"gray"},$.urlObj.sex)),React.createElement("li",null,React.createElement("p",null,"年龄："),React.createElement("p",{className:"gray"},$.urlObj.age)),React.createElement("li",null,React.createElement("p",null,"科室："),React.createElement("p",{className:"red"},$.urlObj.departName)),React.createElement("li",null,React.createElement("p",null,"床位号："),React.createElement("p",{className:"gray"},$.urlObj.bedNo)),React.createElement("li",null,React.createElement("p",null,"住院号："),React.createElement("p",{className:"gray"},$.urlObj.hosNo)),React.createElement("li",null,React.createElement("p",null,"身份证号："),React.createElement("p",{className:"red"},$.urlObj.idCardNo)),React.createElement("li",null,React.createElement("p",null,"入院日期："),React.createElement("p",{className:"gray"},$.urlObj.date))),React.createElement("a",{href:"javascript:;",className:"submit",onClick:this.pageGo},"确认"),React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

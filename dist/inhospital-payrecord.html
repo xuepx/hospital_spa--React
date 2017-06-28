@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>住院缴费查询</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    body{padding-top: .2rem;overflow: auto}
+    li{border-top:1px solid #e5e5e5;}
+    #wrap{position: absolute;top: 1.7rem;bottom:1rem;width:100%;overflow: auto}
+    #number{background-color: #FFFFFF;border:1px solid #e5e5e5;margin:.2rem 2rem .2rem .26rem;padding-left: .26rem;position: relative}
+    #number p{line-height: .9rem;float: left;font-size: 16px;}
+    input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 3rem}
+    #submit{position:absolute;top:.1rem;right:-1.65rem;border-radius:4px;line-height: .7rem;font-size: 16px;text-align: center;width: 1.3rem;background-color: #3F9FF3;color: #FFFFFF}
+    #detail-wrap{display: none;overflow: hidden}
+    #detail-wrap.active{display: block}
+    ul{background-color: #FFFFFF;margin-bottom: .2rem}
+    li{padding: 0 .26rem;overflow: hidden}
+    li:nth-last-child(1){border-bottom: 1px solid #e5e5e5;}
+    li p{font-size: 16px;line-height: .88rem;float: left}
+    .gray{color: #888888}
+    .red{color: #f45306}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{Act:"",inHospitalNo:"",detail:null}},inputCode:function(e){this.setState({inHospitalNo:e.target.value})},submit:function(){var _this=this;$Ajax("getZhuYuanXIaoFeiList",{org:localStorage.getItem("org"),inHospitalNo:this.state.inHospitalNo,startDate:"",endDate:""},function(data){_this.setState({detail:data.obj.dataset.row,Act:"active"})})},render:function(){return React.createElement("div",{class:"body-wrap"},React.createElement("div",{id:"number",className:"clearfix"},React.createElement("p",null,"住院号："),React.createElement("input",{placeholder:"请输入住院号",onChange:this.inputCode}),React.createElement("a",{href:"javascript:;",id:"submit",onClick:this.submit},"提交")),React.createElement("div",{className:this.state.Act,id:"detail-wrap"},null!=this.state.detail&&React.createElement(Detail,{detail:this.state.detail})),React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))}}),Detail=React.createClass({displayName:"Detail",render:function(){return React.createElement("div",{id:"wrap"},React.createElement("ul",null,React.createElement("li",null,React.createElement("p",null,"姓名："),React.createElement("p",{className:"gray"},this.props.detail.patientName)),React.createElement("li",null,React.createElement("p",null,"性别："),React.createElement("p",{className:"gray"},this.props.detail.patientGender)),React.createElement("li",null,React.createElement("p",null,"年龄："),React.createElement("p",{className:"gray"},this.props.detail.age)),React.createElement("li",null,React.createElement("p",null,"科室："),React.createElement("p",{className:"gray"},this.props.detail.hosSection)),React.createElement("li",null,React.createElement("p",null,"入院时间："),React.createElement("p",{className:"gray"},this.props.detail.inDate)),React.createElement("li",null,React.createElement("p",null,"出院时间："),React.createElement("p",{className:"gray"},this.props.detail.outDate)),React.createElement("li",null,React.createElement("p",null,"可用余额："),React.createElement("p",{className:"red"},"￥",this.props.detail.hosBalance)),React.createElement("li",null,React.createElement("p",null,"住院总费用："),React.createElement("p",{className:"red"},"￥",this.props.detail.totalFee))),React.createElement("div",{id:"tip"},React.createElement("p",null,"如需纸质费用清单，请到收费处或自助打印设备进行打印")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

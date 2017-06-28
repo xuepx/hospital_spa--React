@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>预约挂号</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    #type{position: fixed;top: 0;left: .27rem;z-index: 2;border-bottom:1px solid #e5e5e5}
+    #type li{width: 3.48rem;background-color: #FFFFFF;line-height: 1rem;font-size: 18px;text-align: center;float: left}
+    #type li.active{background-color: #78c3e9;color: #FFFFFF}
+    #doc-wrap{position: absolute;top: 1.3rem;bottom: 0;width: 100%;overflow: auto}
+    #doc{padding: 0 .26rem 1.3rem;min-height: 100%;position:relative;}
+    .doc{border:1px solid #e5e5e5;background-color: #FFFFFF;margin-bottom: .3rem}
+    .wrap-1{height: 1.54rem;position: relative;/*background: url("img/next.png")no-repeat right .2rem center;background-size: auto .3rem*/}
+    .wrap-time{height: 1rem;border:1px solid #e5e5e5;width: 100%;background-color: #FFFFFF;position: fixed;top:1.2rem;z-index: 1}
+    .wrap-time li{width:14.28%;float: left}
+    .wrap-time li.active{background-color: #3F9FF3;color: #FFFFFF}
+    .wrap-time li p{height: 50%;line-height: .5rem;text-align: center}
+    img{display: block;width: 1rem;height: 1rem;float: left;margin: .26rem .2rem;border-radius: 50%}
+    .name{line-height: .38rem;font-size: 16px;position: absolute;top: .26rem;left: 1.32rem}
+    .info{line-height: .38rem;position: absolute;top: .64rem;left: 1.32rem}
+    .order{line-height: .38rem;position: absolute;top: 1.02rem;left: 1.32rem}
+    .detail{border-top:1px solid #e5e5e5;position: relative;padding: 0 .2rem}
+    .time{float: left;line-height: .88rem;}
+    .price{position: absolute;left: 2.9rem;line-height: .88rem;}
+    .price span{color: #f4530b}
+    .next{width:1.3rem;line-height: .5rem;border-radius: 4px;background-color: #2190F1;color: #FFFFFF;float: right;margin-top: .19rem;text-align: center}
+    .next.unable{background-color: #d1d2d4}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/babel.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/common.js"></script>
+<script src="js/react.js"></script>
+<script src="js/react-dom.js"></script>
+<script  type="text/babel">
+    var Main = React.createClass({
+        getInitialState: function() {
+            return {
+                Act:['active',''],
+                docList:[],
+                detail:[],
+                date:null,
+                dateList:[]
+            }
+        },
+        componentWillMount:function(){
+            this.change(0)
+        },
+        change:function(i){
+            var _this=this,arr=['',''];
+            arr[i]='active'
+            this.setState({Act:arr,detail:[]});
+            if(!i){
+                $Ajax('getYuyueYishengList',{
+                    org:localStorage.getItem('org'),
+                    sectionCode:$.urlObj.deptId
+                },function(data){
+                    _this.setState({docList:$Fuck(data.obj.dataset.row)})
+                })
+            }else{
+                this.setState({docList:[]});
+            }
+        },
+        chooseDate:function(i,id,time){
+            var _this=this;
+            $Ajax('getYuyueHaoyuanList',{
+                org:localStorage.getItem('org'),
+                sectionCode:$.urlObj.deptId,
+                doctorId:id,
+                startDate:time,
+                endDate:time,
+            },function(data){
+                _this.state.detail[i]=$Fuck(data.obj.dataset.row);
+                _this.state.dateList[i]=time;
+                _this.setState({detail:_this.state.detail,dateList:_this.state.dateList})
+            })
+        },
+        accordingDate:function(time){
+            var _this=this;
+            $Ajax('getYuyueHaoyuanList',{
+                org:localStorage.getItem('org'),
+                sectionCode:$.urlObj.deptId,
+                doctorId:'',
+                startDate:time,
+                endDate:time,
+            },function(data){
+                data=$Fuck(data.obj.dataset.row);
+                _this.setState({detail:data,date:time})
+            })
+        },
+        render: function() {
+            return (<div className="body-wrap">
+                <ul id="type">
+                    <li className={this.state.Act[0]} onClick={this.change.bind(this,0)}>按医生</li>
+                    <li className={this.state.Act[1]} onClick={this.change.bind(this,1)}>按日期</li>
+                </ul>
+                <DocList type={this.state.Act[0] && "doc"} list={this.state.docList} detail={this.state.detail} chooseDate={this.chooseDate} date={this.state.date} dateList={this.state.dateList} accordingDate={this.accordingDate} />
+            </div>)
+        }
+    });
+
+    var DocList=React.createClass({
+        render:function(){
+            var items=[],list=this.props.list,detail=this.props.detail,docTop={top:'2.15rem'};
+            if(this.props.type != 'doc'){
+                list=detail
+            }
+            for(var i=0;i<list.length;i++){
+                items.push(
+                    <li key={i} className="doc">
+                        <div className="wrap-1 clearfix">
+                            <img src="../img/photo.png" />
+                            <p className="name">{list[i].doctorName}</p>
+                            <p className="info" style={{top:'.84rem'}}><span>{list[i].deptName}</span> <span>{list[i].doctorTitle}</span></p>
+                            {/*<p className="order">预约：<span></span>号</p>*/}
+                        </div>
+                        {this.props.type && <Time type={this.props.type} chooseDate={this.props.chooseDate} docId={list[i].doctorId} index={i} />}
+                        {detail[i] && <Detail detail={this.props.type ? detail[i] : detail} date={this.props.type ? this.props.dateList[i] : this.props.date} about={{
+                            type:list[i].doctorTitle,   depart:list[i].deptName,    name:list[i].doctorName,
+                            level:list[i].doctorTitle,  deptId:list[i].deptId,  doctorId:list[i].doctorId
+                        }} />}
+                    </li>
+                )
+            }
+            return(<div>
+                {!this.props.type && <Time accordingDate={this.props.accordingDate}/>}
+                <div id="doc-wrap" style={!this.props.type ? docTop : null}>
+                    <ul id="doc">
+                        {items}
+                        <footer>
+                            <p>Copyright © 2016 医依帮 www.yiebang.cn</p>
+                            <p>巫山县人民医院&医依帮技术支持</p>
+                        </footer>
+                    </ul>
+                </div>
+            </div>)
+        }
+    });
+    
+    var Detail=React.createClass({
+        timeFilter:function(time){
+            switch(time){
+              case 1:return '上午';break;
+              case 2:return '下午';break;
+              case 3:return '全天';break;
+            }
+        },
+        leaveNoFilter:function(n){
+            if(n){
+                return {
+                    class:'next',
+                    name:'余'+n+'号',
+                    pageGo:true
+                }
+            }else{
+                return {
+                    class:'next unable',
+                    name:'号满',
+                    pageGo:false
+                }
+            }
+        },
+        pageGo:function(time,regFee,treatFee,regDate,timeFlag,noType,can){
+            if(can){
+                var obj=this.props.about;
+                $Go('./order-detail.html?'+
+                    $Param({
+                        type:obj.type,
+                        depart:obj.depart,
+                        name:obj.name,
+                        level:obj.level,
+                        deptId:obj.deptId,
+                        doctorId:obj.doctorId,
+                        noType:noType,
+                        time:time,
+                        regFee:regFee,
+                        treatFee:treatFee,
+                        regDate:regDate,
+                        timeFlag:timeFlag
+                    })
+                )
+            }else{
+                alert('该时段已经没有号源了！')
+            }
+        },
+        render:function(){
+            var items=[],detail=this.props.detail;
+            for(var i=0;i<detail.length;i++){
+                if(detail[i].regDate != this.props.date )continue;
+                var obj = this.leaveNoFilter(detail[i].regleaveCount),
+                    time=detail[i].regDate+' '+this.timeFilter(detail[i].timeFlag),
+                    pay=( Number(detail[i].regFee) + Number(detail[i].treatFee) ).toFixed(2);
+                items.push(
+                    <div className="detail clearfix">
+                        <p className="time">{time}</p>
+                        <p className="price">挂号费:<span>￥{pay}</span></p>
+                        <a href="javascript:;" className={obj.class} onClick={this.pageGo.bind(this,time,detail[i].regFee,detail[i].treatFee,detail[i].regDate,detail[i].timeFlag,detail[i].noType,obj.pageGo)}>{obj.name}</a>
+                    </div>
+                )
+            }
+            return (
+                <div className="wrap-2">{items}</div>
+            )
+        }
+    });
+
+    var Time=React.createClass({
+        getInitialState: function() {
+            var arr=[];
+            for(var i=0;i<7;i++){
+                arr.push('')
+            }
+            return {
+                Act:arr
+            }
+        },
+        setWeek:function(n){
+            switch(n){
+                case 1:return '一';break;
+                case 2:return '二';break;
+                case 3:return '三';break;
+                case 4:return '四';break;
+                case 5:return '五';break;
+                case 6:return '六';break;
+                case 0:return '日';break;
+            }
+        },
+        choose:function(time,inx){
+            var arr=[];
+            for(var i=0;i<this.state.Act.length;i++){
+                arr[i]='';
+                if(i==inx)arr[i]='active'
+            }
+            this.setState({Act:arr})
+            if(this.props.type == 'doc'){
+                this.props.chooseDate(this.props.index,this.props.docId,time)
+            }else{
+                this.props.accordingDate(time)
+            }
+        },
+        render:function(){
+            var items=[],today=new Date(),
+                noBorder={
+                    borderBottom:'none',
+                    borderLeft:'none',
+                    borderRight:'none',
+                    position:'relative',
+                    top:'0'
+                },
+                type=this.props.type;
+            for(var i=0;i<this.state.Act.length;i++){
+                today.setDate(today.getDate()+1)
+                items.push(
+                    <li className={this.state.Act[i]} onClick={this.choose.bind(this,$Time(today),i)}>
+                        <p>{this.setWeek(today.getDay())}</p>
+                        <p>{today.getDate()}</p>
+                    </li>
+                )
+            }
+            return (
+                <ul className="wrap-time clearfix"  style={this.props.type && noBorder}>{items}</ul>
+            )
+        }
+    })
+
+    ReactDOM.render(
+            <Main />,
+            document.getElementById('main')
+    );
+</script>

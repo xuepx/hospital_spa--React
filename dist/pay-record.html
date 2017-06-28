@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>门诊缴费记录</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    body{padding-top: .2rem;overflow: auto}
+    li{border-top:1px solid #e5e5e5;}
+    h2{line-height: .88rem;background: url("../img/next.png")no-repeat right .2rem center #FFFFFF;background-size:auto .3rem;font-size: 16px;font-weight: 500;padding-left: .26rem}
+    #wrap{position: absolute;top: 1.98rem;bottom:1rem;width:100%;overflow: auto}
+    table{width: 100%;border-collapse:collapse;display: block;}
+    .title li{background-color: #3F9FF3;color: #FFFFFF;float: left;text-align: center;line-height: .9rem;width: 25%}
+    tr{width: 100%;display: block;overflow: hidden}
+    tr:nth-last-child(1){border-bottom:1px solid #e5e5e5;}
+    td{text-align: center;line-height: .88rem;width: 25%;background-color: #FFFFFF;display: block;float: left}
+    .price{color: #f45306}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{payList:[]}},componentWillMount:function(){var _this=this;$Ajax("getMenZhenQingdanList",{org:localStorage.getItem("org"),patientId:$.urlObj.sourceId,startDate:"",endDate:""},function(data){for(var dataList=$Fuck(data.obj.dataset.row),arr=_this.state.payList,i=0;i<dataList.length;i++)!function(i){$Ajax("getMenZheXiaoFeiList",{org:localStorage.getItem("org"),serialNo:dataList[i].serialNo},function(data){arr[i]=data.obj.dataset.row,arr[i].date=dataList[i].chargeDate,_this.setState({payList:arr})})}(i)})},pageGo:function(){history.go(-1)},render:function(){for(var items=[],list=this.state.payList,i=0;i<list.length;i++)items.push(React.createElement("tr",null,React.createElement("td",null,list[i].date),React.createElement("td",null,list[i].itemType),React.createElement("td",null,list[i].itemNum),React.createElement("td",{className:"price"},"￥",list[i].totalFee)));return React.createElement("div",{class:"body-wrap"},React.createElement("h2",{onClick:this.pageGo},$.urlObj.name,"：就诊号 ",$.urlObj.cardNo),React.createElement("ul",{className:"title clearfix"},React.createElement("li",null,"缴费日期"),React.createElement("li",null,"类目名称"),React.createElement("li",null,"数量"),React.createElement("li",null,"总金额")),React.createElement("div",{id:"wrap"},React.createElement("table",{className:"clearfix"},items),React.createElement("div",{id:"tip"},React.createElement("p",null,"如需纸质费用清单，请到收费处或自助打印设备进行打印"))),React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

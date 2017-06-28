@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>确认患者信息</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    ul{background-color: #FFFFFF;margin-bottom: .2rem}
+    li{border-bottom: 1px solid #e5e5e5;padding: 0 .26rem;overflow: hidden}
+    li p{font-size: 16px;line-height: .88rem;float: left}
+    .gray{color: #888888}
+    .red{color: #f45306}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/babel.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/common.js"></script>
+<script src="js/react.js"></script>
+<script src="js/react-dom.js"></script>
+<script  type="text/babel">
+    var Main = React.createClass({
+        pageGo:function(){
+            $Go('./input-price.html?'+
+                $Param({
+                    patientId:$.urlObj.patientId,
+                    patientNo:$.urlObj.patientNo,
+                    balance:$.urlObj.balance
+                })
+            )
+        },
+        render: function() {
+            return (<div className="body-wrap">
+                <ul>
+                    <li>
+                        <p>院区：</p>
+                        <p className="gray">{localStorage.getItem('orgName')}</p>
+                    </li>
+                    <li>
+                        <p>姓名：</p>
+                        <p className="red">{$.urlObj.name}</p>
+                    </li>
+                    <li>
+                        <p>性别：</p>
+                        <p className="gray">{$.urlObj.sex}</p>
+                    </li>
+                    <li>
+                        <p>年龄：</p>
+                        <p className="gray">{$.urlObj.age}</p>
+                    </li>
+                    <li>
+                        <p>科室：</p>
+                        <p className="red">{$.urlObj.departName}</p>
+                    </li>
+                    <li>
+                        <p>床位号：</p>
+                        <p className="gray">{$.urlObj.bedNo}</p>
+                    </li>
+                    <li>
+                        <p>住院号：</p>
+                        <p className="gray">{$.urlObj.hosNo}</p>
+                    </li>
+                    <li>
+                        <p>身份证号：</p>
+                        <p className="red">{$.urlObj.idCardNo}</p>
+                    </li>
+                    <li>
+                        <p>入院日期：</p>
+                        <p className="gray">{$.urlObj.date}</p>
+                    </li>
+                </ul>
+
+                <a href="javascript:;" className="submit" onClick={this.pageGo}>确认</a>
+
+                <footer>
+                    <p>Copyright © 2016 医依帮 www.yiebang.cn</p>
+                    <p>巫山县人民医院&医依帮技术支持</p>
+                </footer>
+            </div>)
+        }
+    });
+
+    ReactDOM.render(
+            <Main />,
+            document.getElementById('main')
+    );
+</script>

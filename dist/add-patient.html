@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>添加就诊人</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    body{padding-top: .2rem}
+    #wrap{border-bottom: 1px solid #e5e5e5}
+    #wrap li{border-top: 1px solid #e5e5e5;background-color: #FFFFFF}
+    #wrap li p{margin-left:.9rem;line-height: .9rem;float:left;font-size: 16px}
+    #wrap li input{height: .8rem;float: left;width:4rem;margin-left: .1rem;font-size: 16px;line-height:.8rem;padding-top: .1rem}
+    #id-card{background: url("../img/id_card.png")no-repeat left .26rem center;background-size:.4rem auto}
+    #type{display: flex;flex-flow:row nowrap;justify-content:center;}
+    #type li{width:30%; line-height: 1rem;padding-left: 30px;margin: 0 20px;background: url("../img/false.png")no-repeat left center;background-size: 20px auto}
+    #type li.active{background-image: url("../img/true.png")}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{cardNo:null,Act:["active",""],typeName:["身份证号","就诊卡号"],name:"身份证号"}},maxlength:function(e){var val=e.target.value;this.setState({cardNo:val.substring(0,18)})},createPatient:function(){$Ajax("jiuzhenkaBangding",{context:$.type,cardType:"身份证号"==this.state.name?1:2,cardNo:this.state.cardNo,openId:$.openId,org:localStorage.getItem("org")},function(data){alert(data.msg),$Go("./choose-patient.html?"+$Param({from:"addPatient"}))})},changeCard:function(i){var arr=["",""];arr[i]="active",this.setState({Act:arr,name:this.state.typeName[i]})},render:function(){return React.createElement("div",{className:"body-wrap"},React.createElement("ul",{id:"wrap"},React.createElement("li",{className:"clearfix",id:"id-card"},React.createElement("p",null,this.state.name,"："),React.createElement("input",{placeholder:"请输入"+this.state.name,type:"text",value:this.state.cardNo,onChange:this.maxlength}))),React.createElement("ul",{id:"type"},React.createElement("li",{className:this.state.Act[0],onClick:this.changeCard.bind(this,0)},this.state.typeName[0]),React.createElement("li",{className:this.state.Act[1],onClick:this.changeCard.bind(this,1)},this.state.typeName[1])),React.createElement("a",{href:"javascript:;",className:"submit",onClick:this.createPatient},"提交"),React.createElement("footer",null,React.createElement("p",null,"Copyright © 2016 医依帮 www.yiebang.cn"),React.createElement("p",null,"巫山县人民医院&医依帮技术支持")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

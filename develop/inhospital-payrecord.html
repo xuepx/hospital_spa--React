@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>住院缴费查询</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    body{padding-top: .2rem;overflow: auto}
+    li{border-top:1px solid #e5e5e5;}
+    #wrap{position: absolute;top: 1.7rem;bottom:1rem;width:100%;overflow: auto}
+    #number{background-color: #FFFFFF;border:1px solid #e5e5e5;margin:.2rem 2rem .2rem .26rem;padding-left: .26rem;position: relative}
+    #number p{line-height: .9rem;float: left;font-size: 16px;}
+    input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 3rem}
+    #submit{position:absolute;top:.1rem;right:-1.65rem;border-radius:4px;line-height: .7rem;font-size: 16px;text-align: center;width: 1.3rem;background-color: #3F9FF3;color: #FFFFFF}
+    #detail-wrap{display: none;overflow: hidden}
+    #detail-wrap.active{display: block}
+    ul{background-color: #FFFFFF;margin-bottom: .2rem}
+    li{padding: 0 .26rem;overflow: hidden}
+    li:nth-last-child(1){border-bottom: 1px solid #e5e5e5;}
+    li p{font-size: 16px;line-height: .88rem;float: left}
+    .gray{color: #888888}
+    .red{color: #f45306}
+</style>
+</head>
+<body>
+    <div id="main"></div>
+</body>
+</html>
+<script src="js/babel.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/common.js"></script>
+<script src="js/react.js"></script>
+<script src="js/react-dom.js"></script>
+<script  type="text/babel">
+    var Main = React.createClass({
+        getInitialState: function() {
+            return {
+                Act:'',
+                inHospitalNo:'',
+                detail:null,
+            }
+        },
+        inputCode:function(e){
+            this.setState({inHospitalNo:e.target.value})
+        },
+        submit:function(){
+            var _this=this;
+            $Ajax('getZhuYuanXIaoFeiList',{
+                org : localStorage.getItem('org'),
+                inHospitalNo : this.state.inHospitalNo,
+                startDate : '',
+                endDate : ''
+            },function(data){
+                _this.setState({detail:data.obj.dataset.row,Act:'active'})
+            })
+        },
+        render: function() {
+            return (<div class="body-wrap">
+                <div id="number" className="clearfix">
+                    <p>住院号：</p>
+                    <input placeholder="请输入住院号" onChange={this.inputCode} />
+                    <a href="javascript:;" id="submit" onClick={this.submit}>提交</a>
+                </div>
+
+                <div className={this.state.Act} id="detail-wrap">
+                    {this.state.detail != null && <Detail detail={this.state.detail} />}
+                </div>
+
+                <footer>
+                    <p>Copyright © 2016 医依帮 www.yiebang.cn</p>
+                    <p>巫山县人民医院&医依帮技术支持</p>
+                </footer>
+            </div>)
+        }
+    });
+
+    var Detail=React.createClass({
+        render:function(){
+            return(
+                <div id="wrap">
+                    <ul>
+                        <li>
+                            <p>姓名：</p>
+                            <p className="gray">{this.props.detail.patientName}</p>
+                        </li>
+                        <li>
+                            <p>性别：</p>
+                            <p className="gray">{this.props.detail.patientGender}</p>
+                        </li>
+                        <li>
+                            <p>年龄：</p>
+                            <p className="gray">{this.props.detail.age}</p>
+                        </li>
+                        <li>
+                            <p>科室：</p>
+                            <p className="gray">{this.props.detail.hosSection}</p>
+                        </li>
+                        <li>
+                            <p>入院时间：</p>
+                            <p className="gray">{this.props.detail.inDate}</p>
+                        </li>
+                        <li>
+                            <p>出院时间：</p>
+                            <p className="gray">{this.props.detail.outDate}</p>
+                        </li>
+                        <li>
+                            <p>可用余额：</p>
+                            <p className="red">￥{this.props.detail.hosBalance}</p>
+                        </li>
+                        <li>
+                            <p>住院总费用：</p>
+                            <p className="red">￥{this.props.detail.totalFee}</p>
+                        </li>
+                    </ul>
+
+                    <div id="tip">
+                        <p>如需纸质费用清单，请到收费处或自助打印设备进行打印</p>
+                    </div>
+                </div>
+            )
+        }
+    })
+
+    ReactDOM.render(
+            <Main />,
+            document.getElementById('main')
+    );
+</script>
