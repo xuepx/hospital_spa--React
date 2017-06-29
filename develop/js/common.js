@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
 var $={
     reqHost:'http://192.168.11.49:8452',
     openId:123,
+    area:['西院区','东院区','北院区'],
+    org:[1,2,3],
     type:(function(){
         var ua = window.navigator.userAgent.toLowerCase();
         if(/micromessenger/i.test(ua)){

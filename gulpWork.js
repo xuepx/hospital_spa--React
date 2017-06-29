@@ -25,7 +25,6 @@ gulp.task('pack-JS',()=> {
 gulp.task('pack-HTML',['pack-CSS','pack-JS'],()=>{
     let files = fs.readdirSync('./develop'),
         reg=/\.html$/,
-        reg1 = /^<.+(fastclick\.js|common\.js|react\.js|react-dom\.js).+script>$/gm,
         cut1 = '<script  type="text/babel">',
         cut2 = '</script>',
         cut4 = '<script src="js/babel.js"></script>',
@@ -34,7 +33,9 @@ gulp.task('pack-HTML',['pack-CSS','pack-JS'],()=>{
         if(reg.test(val)){
             fs.readFile('./develop/'+val,'utf-8',(err,data)=>{
                 let jsString = data.split(cut1)[1].split(cut2)[0];
-                jsString = uglifyjs.minify( babelCore.transform(jsString,{presets}).code ,{
+                jsString = uglifyjs.minify( babelCore.transform(jsString,{
+                    presets : ['react']
+                }).code ,{
                     mangle:false,
                     fromString:true
                 }).code;

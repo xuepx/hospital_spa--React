@@ -29,13 +29,14 @@
     var Main = React.createClass({
         getInitialState: function() {
             return {
-                areaName:['谭晶路院区','凤凰山院区','后湖院区'],
+                areaName:$.area,
+                org:$.org,
                 Act:['active',''],
                 bigDepartName:[]
             }
         },
         componentWillMount:function(){
-            this.chooseArea(0,1,this.state.areaName[0])
+            this.chooseArea(0,this.state.org[0],this.state.areaName[0])
         },
         chooseArea:function(i,org,name){
             var _this=this,arr=['',''];
@@ -71,12 +72,12 @@
                     </div>
                 )
             }
-            var area=this.state.areaName;
+            var area=this.state.areaName,org=this.state.org;
             return (<div className="body-wrap">
                 <ul id="area">
-                    <li onClick={this.chooseArea.bind(this,0,1,area[0])} className={this.state.Act[0]}>{area[0]}</li>
-                    <li onClick={this.chooseArea.bind(this,1,2,area[1])} className={this.state.Act[1]}>{area[1]}</li>
-                    <li onClick={this.chooseArea.bind(this,2,3,area[2])} className={this.state.Act[2]}>{area[2]}</li>
+                    <li onClick={this.chooseArea.bind(this,0,org[0],area[0])} className={this.state.Act[0]}>{area[0]}</li>
+                    <li onClick={this.chooseArea.bind(this,1,org[1],area[1])} className={this.state.Act[1]}>{area[1]}</li>
+                    <li onClick={this.chooseArea.bind(this,2,org[2],area[2])} className={this.state.Act[2]}>{area[2]}</li>
                 </ul>
 
                 <div id="depart">
