@@ -4,24 +4,19 @@ document.addEventListener('DOMContentLoaded', function() {
     FastClick.attach(document.body);
 }, false);
 
-//config配置
-var $={
-    reqHost:'http://192.168.11.49:8452',
-    openId:123,
-    area:['西院区','东院区','北院区'],
-    org:[1,2,3],
-    type:(function(){
-        var ua = window.navigator.userAgent.toLowerCase();
-        if(/micromessenger/i.test(ua)){
-            return 1;                     //微信
-        }else if(/alipayclient/i.test(ua)){
-            return 2;                     //支付宝
-        }else{
-            return 2;
-        }
-    })(),
-    urlObj:$Parse(decodeURI(window.location.href))
-}
+//config
+$.type=(function(){
+            var ua = window.navigator.userAgent.toLowerCase();
+            if(/micromessenger/i.test(ua)){
+                return 1;                     //微信
+            }else if(/alipayclient/i.test(ua)){
+                return 2;                     //支付宝
+            }else{
+                return 2;
+            }
+        })(),
+$.openId=123,
+$.urlObj=$Parse(decodeURI(window.location.href))
 
 //页面跳转
 function $Go(url){window.location.href=url}
@@ -58,7 +53,9 @@ function $Ajax(url,obj,fn){
             if ( xhr.readyState == 4 ) {
                 $Loading.remove();
                 if ( xhr.status == 200 ) {
-                    success && success( eval("("+xhr.responseText+")") );
+                    var data = eval("("+xhr.responseText+")");
+                    if(!data.success)alert(data.msg);
+                    if(success && data.success)success( data );
                 } else {
                     err && err();
                 }
