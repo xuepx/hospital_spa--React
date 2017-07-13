@@ -62,14 +62,22 @@
             }
         },
         choosePatient:function(){
-              $Go('./choose-patient.html?'+
-                  $Param({
-                      from:'orderDetail'
-                  })
-              )
+            if(this.state.patientName=="请先添加就诊人"){
+                $Go('./choose-patient.html?'+
+                    $Param({
+                        from:'orderDetail'
+                    })
+                )
+            }else{
+                $Go('./add-patient.html?'+
+                    $Param({
+                        from:'orderDetail'
+                    })
+                )
+            }
         },
         timeFilter:function(time){
-            switch(time){
+            switch(Number(time)){
                 case 1:return '上午';break;
                 case 2:return '下午';break;
                 case 3:return '全天';break;
@@ -100,6 +108,9 @@
                 },function(data){
                     location.replace($.reqHost+'/hrwgzyy/rest/jiaofei?' + 'merBillNo='+data.obj.MerBillNo+'&productName=线上挂号&price='+(Number($.urlObj.treatFee)+Number($.urlObj.regFee))+'&payAccount='+_this.state.sourceId)
                 })
+            }else{
+                alert('请先添加就诊人')
+                this.choosePatient()
             }
         },
         render: function() {
@@ -146,7 +157,7 @@
                 <a href="javascript:;" className="submit" onClick={this.submit}>提交</a>
 
                 <footer>
-                    <p>华润武钢总医院</p>
+                    <p>{$.hosName}</p>
                     <p>Copyright ©2017 医依帮 yiebang.cn</p>
                 </footer>
             </div>)

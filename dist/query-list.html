@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>诊疗与药品信息查询</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    header{background: #FFFFFF;font-size: 18px;height: .9rem;line-height: .9rem;text-align: center;border-bottom: 1px solid #e}
+    header span{color: #3f9ff3}
+    ul{overflow: auto;position: absolute;top: .9rem;bottom:1rem;width: 100%}
+    li{margin-bottom: .22rem;}
+    li h3{background-color: #3f9ff3;color: #FFFFFF;font-size: 16px;line-height: .9rem;padding: 0 .26rem;}
+    li p{background-color: #FFFFFF;font-size: 16px;line-height: .9rem;padding: 0 .26rem;border-bottom: 1px solid #e5e5e5}
+    li p span{color: #888888}
+</style>
+</head>
+<body>
+<div id="main"></div>
+</body>
+</html>
+<script src="../config.js"></script>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{searchList:[]}},componentWillMount:function(){var _this=this;Number($.urlObj.type)||$Ajax("mu048",{pyCode:$.urlObj.pyCode},function(data){_this.setState({searchList:$Fuck(data.obj.dataset.row)})})},render:function(){for(var items=[],list=this.state.searchList,i=0;i<list.length;i++)items.push(React.createElement("li",null,React.createElement("h3",null,i+1,".",list[i].drugName),React.createElement("p",null,"剂型：",React.createElement("span",null,list[i].drugName)),React.createElement("p",null,"编码：",React.createElement("span",null,list[i].drugCode)),React.createElement("p",null,"单价：",React.createElement("span",null,list[i].drugPrice+"/"+list[i].drugUnit)),React.createElement("p",null,"规格：",React.createElement("span",null,list[i].drugNorms))));return React.createElement("div",{class:"body-wrap"},React.createElement("header",null,"包含",React.createElement("span",null,$.urlObj.pyCode),"的记录"),React.createElement("ul",null,items),React.createElement("footer",null,React.createElement("p",null,$.hosName),React.createElement("p",null,"Copyright ©2017 医依帮 yiebang.cn")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

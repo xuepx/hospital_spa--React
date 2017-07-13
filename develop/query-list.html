@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>诊疗与药品信息查询</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    header{background: #FFFFFF;font-size: 18px;height: .9rem;line-height: .9rem;text-align: center;border-bottom: 1px solid #e}
+    header span{color: #3f9ff3}
+    ul{overflow: auto;position: absolute;top: .9rem;bottom:1rem;width: 100%}
+    li{margin-bottom: .22rem;}
+    li h3{background-color: #3f9ff3;color: #FFFFFF;font-size: 16px;line-height: .9rem;padding: 0 .26rem;}
+    li p{background-color: #FFFFFF;font-size: 16px;line-height: .9rem;padding: 0 .26rem;border-bottom: 1px solid #e5e5e5}
+    li p span{color: #888888}
+</style>
+</head>
+<body>
+<div id="main"></div>
+</body>
+</html>
+<script src="../config.js"></script>
+<script src="js/babel.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/common.js"></script>
+<script src="js/react.js"></script>
+<script src="js/react-dom.js"></script>
+<script  type="text/babel">
+    var Main = React.createClass({
+        getInitialState: function() {
+            return {
+                searchList:[]
+            }
+        },
+        componentWillMount:function(){
+            var _this=this;
+            if(Number($.urlObj.type)){
+
+            }else{
+                $Ajax('mu048',{
+                    pyCode:$.urlObj.pyCode
+                },function(data){
+                    _this.setState({searchList:$Fuck(data.obj.dataset.row)})
+                })
+            }
+        },
+        render: function() {
+            var items=[],list=this.state.searchList;
+            for(var i=0;i<list.length;i++){
+                items.push(
+                    <li>
+                        <h3>{i+1}.{list[i].drugName}</h3>
+                        <p>剂型：<span>{list[i].drugName}</span></p>
+                        <p>编码：<span>{list[i].drugCode}</span></p>
+                        <p>单价：<span>{list[i].drugPrice+"/"+list[i].drugUnit}</span></p>
+                        <p>规格：<span>{list[i].drugNorms}</span></p>
+                    </li>
+                )
+            }
+            return (<div class="body-wrap">
+                <header>
+                    包含<span>{$.urlObj.pyCode}</span>的记录
+                </header>
+                <ul>
+                    {items}
+                </ul>
+                <footer>
+                    <p>{$.hosName}</p>
+                    <p>Copyright ©2017 医依帮 yiebang.cn</p>
+                </footer>
+            </div>)
+        }
+    });
+
+    ReactDOM.render(
+            <Main />,
+            document.getElementById('main')
+    );
+</script>

@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
 }, false);
 
 //config
+$.urlObj=$Parse(decodeURI(window.location.href))
+$.hosName="医院名字XXX"
 $.type=(function(){
             var ua = window.navigator.userAgent.toLowerCase();
             if(/micromessenger/i.test(ua)){
@@ -14,9 +16,32 @@ $.type=(function(){
             }else{
                 return 2;
             }
-        })(),
-$.openId=123,
-$.urlObj=$Parse(decodeURI(window.location.href))
+        })()
+$.openId=(function(){
+                if(localStorage.getItem('openId')){
+                    return localStorage.getItem('openId')
+                }else{
+                    var ob=$Parse(window.location.href);
+                    var environment=$.type;         //表明支付宝还是微信
+                    var code='';                    //授权code 在用户访问授权地址后返回
+                    if(environment==1){             //环境不同code的key不同，获取授权code
+                        code=ob.code;
+                    }else{
+                        code=ob.auth_code;
+                    }
+                    $Ajax('userInfoGetSuper',{
+                        environment:environment,
+                        code:code ? code : '',
+                        returnUrl:code ? '' : window.location.href
+                    },function(data){
+                        if(!code){
+                            window.location.href=data.obj.codeUrl;  //跳转到授权地址授权
+                        }else{                                      //如果授权完成，即为获取用户信息
+                            return data.obj.userId;
+                        }
+                    })
+                }
+        })()
 
 //页面跳转
 function $Go(url){window.location.href=url}

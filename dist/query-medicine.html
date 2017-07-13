@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>诊疗与药品信息查询</title>
+<link type="text/css" rel="stylesheet" href="js/common.css">
+<style>
+    #wrap-1{height: .9rem;background-color: #FFFFFF;padding: 0 .3rem;padding-top:.15rem;}
+    #wrap-1 div{height: .6rem;border: 1px solid #3f9ff3;border-radius: 4px;background: url("../img/serch.png")no-repeat left .11rem center;background-size: auto .32rem}
+    #wrap-1 input{padding-left:.52rem;width:6.2rem;line-height:.6rem;font-size:16px;color:#888888;background: none;}
+    #wrap-1 span{display: block;float: right;background:url("../img/exit.png")no-repeat center;background-size: auto .32rem;width:.6rem;height: .6rem}
+    #search-type{margin-top: .2rem;overflow:hidden;border-top:1px solid #e5e5e5;}
+    #search-type a{display:block;float: left;width: 50%;border-bottom:1px solid #e5e5e5;color:#6ab1f9;font-size: 16px;padding:1.84rem 0 .26rem;text-align: center}
+    #search-type a:nth-child(1){border-right:1px solid #e5e5e5;background:url("../img/s-1.png")no-repeat top .47rem center;background-size: auto 1.22rem;}
+    #search-type a:nth-child(2){background:url("../img/s-2.png")no-repeat top .47rem center;background-size: auto 1.22rem; }
+</style>
+</head>
+<body>
+<div id="main"></div>
+</body>
+</html>
+<script src="../config.js"></script>
+<script src="js/frame.js"></script>
+<script>var Main=React.createClass({displayName:"Main",getInitialState:function(){return{inputVal:""}},inputCode:function(e){/^[A-z]*$/.test(e.target.value)&&this.setState({inputVal:e.target.value})},pageGo:function(inx){$Go("./query-list.html?pyCode="+this.state.inputVal+"&type="+inx)},render:function(){return React.createElement("div",{class:"body-wrap"},React.createElement("div",{id:"wrap-1"},React.createElement("div",null,React.createElement("input",{value:this.state.inputVal,onChange:this.inputCode,placeholder:"请输入药品诊疗服务拼音首字母"}),React.createElement("span",null))),React.createElement("div",{id:"tip"},React.createElement("p",null,"如:查询奥美拉唑，请输入AMLZ，然后点击药品信息查询；查询奥美拉唑，请输入AMLZ，然后点击药品信息查询")),React.createElement("div",{id:"search-type"},React.createElement("a",{onClick:this.pageGo.bind(this,1)},"诊疗服务查询"),React.createElement("a",{onClick:this.pageGo.bind(this,0)},"药品信息查询")),React.createElement("footer",null,React.createElement("p",null,$.hosName),React.createElement("p",null,"Copyright ©2017 医依帮 yiebang.cn")))}});ReactDOM.render(React.createElement(Main,null),document.getElementById("main"));</script>

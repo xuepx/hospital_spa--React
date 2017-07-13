@@ -32,7 +32,7 @@
    var Main = React.createClass({
        getInitialState: function() {
            return {
-               cardNo: null,
+               cardNo: "",
                Act:['active',''],
                typeName:['身份证号','就诊卡号'],
                name:'身份证号'
@@ -51,11 +51,15 @@
                org:localStorage.getItem('org')
            },function(data){
                 alert(data.msg)
-                $Go('./choose-patient.html?'+
-                    $Param({
-                        from:'addPatient'
-                    })
-                )
+               if($.urlObj.from="orderDetail"){
+                   history.go(-1)
+               }else{
+                   $Go('./choose-patient.html?'+
+                       $Param({
+                           from:'addPatient'
+                       })
+                   )
+               }
            })
        },
        changeCard:function(i){
@@ -79,7 +83,7 @@
                <a href="javascript:;" className="submit" onClick={this.createPatient}>提交</a>
 
                <footer>
-                    <p>华润武钢总医院</p>
+                    <p>{$.hosName}</p>
                     <p>Copyright ©2017 医依帮 yiebang.cn</p>
                </footer>
            </div>)

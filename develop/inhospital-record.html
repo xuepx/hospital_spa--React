@@ -10,18 +10,22 @@
     body{padding-top: .2rem;overflow: auto}
     li{border-top:1px solid #e5e5e5;}
     h2{line-height: .88rem;font-size: 16px;background-color:#FFFFFF;font-weight: 500;padding:0 .26rem}
-    #wrap{position: absolute;top: 3.3rem;bottom:1rem;width:100%;overflow: auto}
-    table{width: 100%;border-collapse:collapse;display: block;background-color: #FFFFFF}
+    #wrap{position: absolute;top: 4.2rem;bottom:1rem;width:100%;overflow: auto}
+    #wrap table{width: 100%;border-collapse:collapse;display: block;background-color: #FFFFFF}
     .title li{background-color: #3F9FF3;color: #FFFFFF;float: left;text-align: center;line-height: .9rem;width: 25%}
-    tr{width: 100%;display: block;overflow: hidden;border-bottom:1px solid #e5e5e5;}
-    td{text-align: center;line-height: .88rem;width: 25%;display: block;float: left}
+    #wrap tr{width: 100%;display: block;overflow: hidden;border-bottom:1px solid #e5e5e5;}
+    #wrap td{text-align: center;line-height: .88rem;width: 25%;display: block;float: left}
     .price{color: #f45306}
-    #number{background-color: #FFFFFF;border:1px solid #e5e5e5;margin:.2rem 2rem .2rem .26rem;padding-left: .26rem;position: relative}
+    #number{background-color: #FFFFFF;border:1px solid #e5e5e5;margin:0 2rem .2rem .26rem;padding-left: .26rem;position: relative}
     #number p{line-height: .9rem;float: left;font-size: 16px;}
-    input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 3rem}
+    input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 2.1rem}
     #submit{position:absolute;top:.1rem;right:-1.65rem;border-radius:4px;line-height: .7rem;font-size: 16px;text-align: center;width: 1.3rem;background-color: #3F9FF3;color: #FFFFFF}
     #detail-wrap{display: none}
     #detail-wrap.active{display: block}
+    #calendar{display: block;position: absolute;top: .1rem;right: .1rem;height: .7rem;width: .8rem;background: url("../dateChoose/skins/yalan/icon.png")no-repeat right center;background: 70% auto}
+    #time{position:absolute;left:0.26rem;padding-left: 140px}
+    #choose-time p{line-height: .9rem;font-size: 16px;margin: 0 .26rem;padding:0 .26rem;background-color: #FFFFFF;border: 1px solid #e5e5e5;margin-bottom: .2rem}
+    .laydate_box,.laydate_box *{box-sizing: content-box}
 </style>
 </head>
 <body>
@@ -29,6 +33,7 @@
 </body>
 </html>
 <script src="../config.js"></script>
+<script src="../dateChoose/laydate.js"></script>
 <script src="js/babel.js"></script>
 <script src="js/fastclick.js"></script>
 <script src="js/common.js"></script>
@@ -46,48 +51,60 @@
                     patientName:'',
                     patientGender:'',
                     age:''
-                },
+                }
             }
         },
         inputCode:function(e){
             this.setState({inHospitalNo:e.target.value})
         },
-        submit:function(){
+        chooseDate:function(){
             var _this=this;
-            $Ajax('getZhuyuanQingdanList',{
-                org : localStorage.getItem('org'),
-                inHospitalNo : this.state.inHospitalNo,
-                startDate : '',
-                endDate : ''
-            },function(data){
-                data.obj.dataset.hosSection=data.obj.hosSection;
-                data.obj.dataset.patientName=data.obj.patientName;
-                data.obj.dataset.patientGender=data.obj.patientGender;
-                data.obj.dataset.age=data.obj.age;
-                _this.setState({payList:data.obj.dataset,Act:'active'})
-            })
+            laydate.skin('yalan');//切换皮肤，请查看skins下面皮肤库
+            laydate({
+                elem:"#time",
+                min: laydate.now(-90), //-1代表昨天，-2代表前天，以此类推
+                max: laydate.now() //+1代表明天，+2代表后天，以此类推
+            });
+        },
+        submit:function(){
+            var _this=this,time=this.refs.time.innerHTML;
+            if(time){
+                $Ajax('mu027',{
+                    inHospitalNo : this.state.inHospitalNo,
+                    startDate :time,
+                    endDate : time
+                },function(data){
+                    _this.setState({payList:data.obj.dataset.row,Act:'active'})
+                })
+            }else{
+                alert('请先选择日期再查询')
+            }
         },
         render: function() {
             var items=[],list=this.state.payList;
-            for(var i=0;i<list.row.length;i++){
+            for(var i=0;i<list.length;i++){
+                var time=String(list[i].itemDateTime);
                 items.push(
                     <tr>
-                        <td style={{width:'30%'}}>{list.row[i].itemDateTime.split(' ')[0]}<br/>{list.row[i].itemDateTime.split(' ')[1]}</td>
-                        <td style={{width:'30%'}}>{list.row[i].itemName}</td>
-                        <td style={{width:'15%'}}>{list.row[i].itemNum}</td>
-                        <td className="price">￥{list.row[i].itemPrice}</td>
+                        <td style={{width:'30%'}}>{time.substring(0,4)+'-'+time.substring(4,6)+'-'+time.substring(6,8)}</td>
+                        <td style={{width:'30%'}}>{list[i].itemName}</td>
+                        <td style={{width:'15%'}}>{list[i].itemNum}</td>
+                        <td className="price">￥{list[i].itemPrice}</td>
                     </tr>
                 )
             }
             return (<div class="body-wrap">
                 <div id="number" className="clearfix">
                     <p>住院号：</p>
-                    <input placeholder="请输入住院号" onChange={this.inputCode} />
+                    <input id="code" placeholder="请输入住院号" onChange={this.inputCode} />
                     <a href="javascript:;" id="submit" onClick={this.submit}>提交</a>
+                    <span id="calendar" onClick={this.chooseDate.bind(this)}></span>
                 </div>
-
+                <div id="choose-time">
+                    <p>查询时间为：<span id="time" ref="time"></span></p>
+                </div>
                 <div className={this.state.Act} id="detail-wrap">
-                    <h2>{list.hosSection}：{list.patientName}<span style={{float:'right'}}>{list.patientGender}，{list.age}</span></h2>
+                    {list.length && <h2>{list[0].hosSection}：{list[0].patientName}<span style={{float:'right'}}>{list[0].patientGender}，{list[0].age}</span></h2>}
                     <ul className="title clearfix">
                         <li style={{width:'30%'}}>缴费日期</li>
                         <li style={{width:'30%'}}>类目名称</li>
@@ -107,7 +124,7 @@
                 </div>
 
                 <footer>
-                    <p>华润武钢总医院</p>
+                    <p>{$.hosName}</p>
                     <p>Copyright ©2017 医依帮 yiebang.cn</p>
                 </footer>
             </div>)
