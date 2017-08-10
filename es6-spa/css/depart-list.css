@@ -1,0 +1,10 @@
+.P20{background-color: #f0f0f5}
+.P20 #ul-wrapper{position: absolute;top: 0;width: 100%;bottom: 1rem;overflow: hidden}
+.P20 #ul-wrapper li,.P20 #shade-wrapper ul li{background-color: #FFFFFF;padding-left: .3rem}
+.P20 #ul-wrapper li span,.P20 #shade-wrapper ul li span{display: block;border-bottom: 1px solid #e8e8e8;font-size: 14px;color: #333333;line-height: .9rem;background: url('../img/next.png')no-repeat right .3rem center;background-size: auto .3rem;padding-right: .3rem}
+.P20 #ul-wrapper li:nth-last-child(1) span,.P20 #shade-wrapper ul li:nth-last-child(1) span{border: none}
+.P20 #shade-wrapper{position: absolute;overflow: hidden;height:100%;top:0;width: 100%;z-index: 2;background-color:rgba(0,0,0,.5)}
+.P20 #close-shade{float: left;height: 100%;width: 40%;}
+.P20 #shade-list{position: absolute;overflow: hidden;background-color: #f0f0f5;width: 60%;height: 100%;right: 0;}
+.P20 #shade-list h3{background-color:#FFFFFF;font-size: 16px;line-height: .9rem;height:.9rem;color: #7f167b;font-weight:500;text-align: center;border-bottom: 1px solid #e6e6e6}
+.P20 #ul-wrapper2{background-color:#f0f0f5;position: absolute;top: .9rem;bottom: 0rem;width: 100%;overflow: hidden}

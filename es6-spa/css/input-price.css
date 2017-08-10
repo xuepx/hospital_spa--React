@@ -1,0 +1,7 @@
+/*input-price*/
+.P9 ul{background-color: #FFFFFF;margin-bottom: .2rem}
+.P9 li{border-bottom: 1px solid #e5e5e5;padding: 0 .26rem;overflow: hidden}
+.P9 li p{font-size: 16px;line-height: .88rem;float: left}
+.P9 .gray{color: #888888}
+.P9 .red{color: #f45306}
+.P9 input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 4rem}

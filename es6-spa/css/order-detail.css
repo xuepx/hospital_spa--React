@@ -1,0 +1,7 @@
+/*order-detail*/
+.P10 ul{background-color: #FFFFFF;margin-bottom: .2rem}
+.P10 li{border-bottom: 1px solid #e5e5e5;padding: 0 .26rem;overflow: hidden}
+.P10 li p{font-size: 16px;line-height: .88rem;float: left}
+.P10 .gray{color: #888888}
+.P10 .red{color: #f45306}
+.P10 #choose{background: url("../img/next.png")no-repeat right .2rem center;background-size: auto .3rem;border-top: 1px solid #e5e5e5;}

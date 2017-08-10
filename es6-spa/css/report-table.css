@@ -1,0 +1,13 @@
+/*report-table*/
+.P18{padding-top: .2rem;}
+.P18 .top{margin: 0 .26rem .2rem;background-color: #FFFFFF;border: 1px solid #e5e5e5;}
+.P18 .top p{float: left;line-height: 1rem;font-size: 16px;padding-left: .82rem;background: url("../img/card.png")no-repeat left .22rem center;background-size:.43rem auto;}
+.P18 .top span{display: block;float: left;font-size: 16px;color: #3f9ff3;line-height: 1rem}
+.P18 #list,#detail{width:100%;position: absolute;bottom: 1rem;top: 3.7rem;overflow: auto}
+.P18 #list ul{border-top: 1px solid #e5e5e5;padding: 0 .4rem;background-color: #FFFFFF}
+.P18 #list li{line-height: .9rem;border-bottom: 1px solid #e5e5e5;}
+.P18 #detail{padding: 0 .26rem}
+.P18 #detail div{margin-bottom: .26rem;border: 1px solid #e5e5e5;}
+.P18 #detail p,#detail h3{background-color: #FFFFFF;padding:.2rem}
+.P18 #detail h3{color: #3f9ff3;line-height: .9rem;padding: 0 .2rem;font-size: 16px;font-weight: 500;border-bottom: 1px solid #e5e5e5;}
+.P18 #detail p{line-height: 22px}
