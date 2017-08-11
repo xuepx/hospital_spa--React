@@ -10,7 +10,6 @@ export default class Login extends React.Component{
         })
     }
     render() {
-        console.log(this.props.history)
         return (<div className="login-shade">
             <div id="login-wrap">
                 <h3>用户登录</h3>

@@ -11,7 +11,7 @@ export default class Index extends React.Component {
         $Next()
     }
     render(){
-        return (<div className="body-wrap"> <div className="route-shade"></div>
+        return (<div className="body-wrap" style={{overflow:"auto"}}> <div className="route-shade"></div>
                 <div id="index-nav">
                     <Link to="/add-patient">添加就诊人</Link>
                     <Link to="/choose-patient">选择科室</Link>

@@ -1,0 +1,12 @@
+.P24{background: #f0f0f5}
+.P24 .scroll-wrapper div{padding-left:.3rem;background: #ffffff;margin-bottom: .2rem;border-bottom:1px solid #dddddd;border-top:1px solid #dddddd}
+.P24 .scroll-wrapper div:nth-of-type(1){border-top: none}
+.P24 li{border-bottom:1px solid #dddddd;overflow: hidden;position: relative;}
+.P24 li.choose{background: url("../img/next-normal.png")no-repeat right .3rem center;background-size: .17rem auto}
+.P24 li:nth-last-child(1){border:none}
+.P24 p{line-height:.86rem;float: left;}
+.P24 span{line-height: .86rem;float: right;max-width: 5.5rem;color: #6b6b6b}
+.P24 #submit{display:block;position: absolute;bottom: 0;width:100%;text-align: center;line-height: 1rem;background-color: #7f167b;color: #ffffff;font-size: 18px;}
+.P24 #tip-wrap{padding: 0 .3rem;overflow: hidden;background: inherit;margin:0;border:none}
+.P24 #excuse{line-height: 1rem;color: #ff0000;float: left}
+.P24 #excuse-text{color: #4a4a4a;float: left;line-height: .5rem;padding-top: .23rem;margin-right: 10px}

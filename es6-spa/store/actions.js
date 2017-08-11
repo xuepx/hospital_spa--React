@@ -8,23 +8,20 @@ export const pageBack = () => {
         type:'right'
     }
 }
+export const setInf = (key,val) => {
+    return {
+        type:key,
+        value:val
+    }
+}
 /*export function requestPosts() {
     return function (dispatch)  {
         setTimeout(
             () => {dispatch({
-                type:"ADD_TODO",
-                    id:333,
-                    text:"思思"
+                type:"1",
+                id:333,
+                text:""
             })},2000
         )
     }
-}
-
-export function begin() {
-    return {
-        type:"ADD_TODO",
-        id:1,
-        text:"哦？"
-    }
-}
-*/
+}*/

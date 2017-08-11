@@ -92,7 +92,7 @@ $Loading.remove=function(){
 function $Ajax(url,obj,fn){
     ajax("post",$.reqHost+url,$Param(obj),fn);
     function ajax(method, url, data, success,err) {
-        $Loading();
+        //$Loading();
         var xhr = new XMLHttpRequest();
         if (method == 'get' && data) {
             url += '?' + data;
@@ -155,6 +155,15 @@ function $Time(tDate){
     return tDate.getFullYear()+'-'+tMonth+'-'+tDay
 }
 
+//手机号验证
+function $checkPhone(string){
+    if(!(/^1[34578]\d{9}$/.test(string))){
+        return false;
+    }else{
+        return true;
+    }
+}
+
 //给支付平台坑爹接口擦屁股
 function $Fuck(a){
     if(typeof a.length == 'undefined' && typeof a != 'number'){
@@ -166,4 +175,4 @@ function $Fuck(a){
 
 init()
 
-export {$,$Go,$Loading,$Ajax,$Param,$Parse,$Time,$Fuck,$Next}
+export {$,$Go,$Loading,$Ajax,$Param,$Parse,$Time,$Fuck,$Next,$checkPhone}

@@ -16,7 +16,7 @@ const compiler = webpack({
         rules:[
             {
                 test:/\.css$/,
-                include:[path.resolve(__dirname, "./css")],
+                include:[path.resolve(__dirname, "./")],
                 loader:"style-loader!css-loader?minimize=true"
             },
             {
@@ -67,7 +67,6 @@ const compiler = webpack({
         }),
     ]
 });
-
 
 let num=0;
 const watching = compiler.watch({

@@ -2,7 +2,6 @@ import React from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { HashRouter as Router,Route } from 'react-router-dom'
 import { Provider,connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import * as action from '../store/actions'
 
 import Index from '../index.jsx';
@@ -29,10 +28,10 @@ import DepartList from '../component/depart-list.jsx';
 import DoctorList from '../component/doctor-list.jsx';
 import HospitalIntroduce from '../component/hospital-introduce.jsx';
 import Register from '../component/login/register.jsx';
+import RegisterConfirm from '../component/login/register-confirm.jsx';
 
 @connect (
-    state => state,
-    dispatch => bindActionCreators(action, dispatch)
+    state => {return {routecss:state.routecss} } 
 )
 class Main extends React.Component {
     constructor(props) {
@@ -71,6 +70,7 @@ class Main extends React.Component {
                                 <Route location={location} path="/doctor-list" component={DoctorList}/>
                                 <Route location={location} path="/hospital-introduce" component={HospitalIntroduce}/>
                                 <Route location={location} path="/register" component={Register}/>
+                                <Route location={location} path="/register-confirm" component={RegisterConfirm}/>
                             </div>
                         </ReactCSSTransitionGroup>
                     )

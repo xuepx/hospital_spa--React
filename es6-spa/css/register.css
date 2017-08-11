@@ -1,11 +1,18 @@
 .P23{background: #f0f0f5}
-.P23 #ul-wrapper{position: absolute;top:0;width: 100%;bottom: .98rem;}
-.P23 #ul-wrapper div{padding-left:.3rem;background: #ffffff;margin-bottom: .2rem;border-bottom:1px solid #dddddd;border-top:1px solid #dddddd}
-.P23 #ul-wrapper div:nth-of-type(1){border-top: none}
+.P23 .scroll>div{padding-left:.3rem;background: #ffffff;margin-bottom: .2rem;border-bottom:1px solid #dddddd;border-top:1px solid #dddddd}
+.P23 .scroll>div:nth-of-type(1){border-top: none}
 .P23 li{height: .86rem;border-bottom:1px solid #dddddd;overflow: hidden;position: relative;}
+.P23 #pos-wrap{height: auto}
 .P23 li.choose{background: url("../img/next-normal.png")no-repeat right .3rem center;background-size: .17rem auto}
 .P23 li:nth-last-child(1){border:none}
+.P23 #pos-wrap{height:2.58rem}
+.P23 #select-pos{position: absolute;left: 2.4rem;overflow: hidden}
+.P23 #select-pos p{border:1px solid #ddd;border-radius: 3px;height: .6rem;margin: .13rem;}
+.P23 #select-pos .pos-icon{display: block;height: .6rem;width:.6rem;border-right:1px solid #ddd;float: left}
+.P23 #select-pos .pos-choose{padding: 0 27px;line-height: .6rem;display: block;float: left;}
 .P23 p{line-height:.86rem;float: left;}
 .P23 input,.P23 span{height:.86rem;position: absolute;top: 0;left: 2.4rem;line-height: 18px;width: 4.2rem}
 .P23 span{line-height: .86rem}
-.P23 #submit{display:block;position: absolute;bottom: 0;width:100%;text-align: center;line-height: .98rem;background-color: #7f167b;color: #ffffff;font-size: 18px;}
+.P23 #submit{display:block;position: absolute;bottom: 0;width:100%;text-align: center;line-height: 1rem;background-color: #7f167b;color: #ffffff;font-size: 18px;}
+.P23 #test-code{left: 0}
+.P23 #get-code{right: .3rem;width: auto;text-align: right;color: #7f167b;text-decoration: underline;left: initial}
