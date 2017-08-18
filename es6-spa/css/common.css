@@ -7,18 +7,24 @@ html,body{height: 100%}
 .clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
 a{-webkit-tap-highlight-color:rgba(0,0,0,0);}
 
-#index-nav a{display: block;width: 100%;line-height: 39px;font-size: 25px;color: #666666;border-bottom: 2px solid rgb(127,22,123);text-align: center}
-
-/*public*/
+/*Index*/
+#index-nav a{display: block;width: 100%;line-height: 39px;font-size: 25px;color: #666666;border-bottom: 2px solid #7f167b;text-align: center}
+/*body*/
 #main{height: 100%}
 .body-wrap{height: 100%;overflow: auto;background-color: #FFFFFF;transform: translateZ(0);overflow: hidden}
-.submit{display: block;text-align:center;margin-top:.7rem;height: .7rem;width: 70%;margin-left:15%;border-radius: 4px;color: #FFFFFF;line-height: .7rem;font-size: 18px;background-color: #3F9FF3}
+/*footer*/
 footer{position: absolute;left:0;bottom:0;width: 100%;padding-bottom: .1rem}
 footer p{color: #8F8F8F;line-height: .4rem;text-align: center;}
-#tip{background: url("../img/warn.png")no-repeat top .08rem left .26rem;background-size: auto .3rem;padding-left: .72rem;margin-top: .3rem}
-#tip p{color: #888888;padding-right: .2rem}
+/*route*/
 .route-shade{display: none;background-color:#000000;position: absolute;top: 0;left: 0;width: 100%;height: 100%;z-index: 3;transform: translateZ(0)}
-.scroll-wrapper{position: absolute;top:0;width: 100%;bottom: 1rem;}
+/*iscroll*/
+.scroll-wrapper{position: absolute;top:0;width: 100%;bottom: 1rem;overflow: hidden}
+/*shade*/
+.shade-wrapper{position: absolute;overflow: hidden;height:100%;top:0;width: 100%;z-index: 2;background-color:rgba(0,0,0,.5)}
+#close-shade{float: left;height: 100%;width: 40%;}
+#shade-list{position: absolute;overflow: hidden;background-color: #f0f0f5;width: 60%;height: 100%;right: 0;}
+#shade-list h3{background-color:#FFFFFF;font-size: 16px;line-height: .9rem;height:.9rem;color: #7f167b;font-weight:500;text-align: center;border-bottom: 1px solid #e6e6e6}
+#shade-ul-wrapper{background-color:#f0f0f5;position: absolute;top: .9rem;bottom: 0rem;width: 100%;overflow: hidden}
 
 /*loading*/
 #loading{
@@ -104,7 +110,8 @@ footer p{color: #8F8F8F;line-height: .4rem;text-align: center;}
     -webkit-animation-delay:1.04s;
 }
 
-/*React动画树*/
+/*********React动画树********************/
+/*shade-list*/
 .shade-enter {
     background-color: rgba(0,0,0,0) !important;
 }
@@ -122,7 +129,7 @@ footer p{color: #8F8F8F;line-height: .4rem;text-align: center;}
     transition:.3s;
 }
 .shade-leave #shade-list{
-    btransform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 }
 .shade-leave.shade-leave-active {
     background-color: rgba(0,0,0,0) !important;
@@ -133,13 +140,13 @@ footer p{color: #8F8F8F;line-height: .4rem;text-align: center;}
     opacity: 0;
     transition:.3s;
 }
-
+/*router-go*/
 .left-enter {
     z-index: 10;
     transform: translate3d(100%,0,0);
 }
 .left-enter.left-enter-active{
-    transform: translate3d(0,0,0) translateZ(0);
+    transform: translate3d(0,0,0);
     transition:.3s;
 }
 .left-leave {
@@ -150,7 +157,7 @@ footer p{color: #8F8F8F;line-height: .4rem;text-align: center;}
     opacity: .05;
 }
 .left-leave.left-leave-active {
-    transform: translate3d(-50%,0,0) translateZ(0);
+    transform: translate3d(-50%,0,0);
     transition:.3s;
 }
 .left-leave.left-leave-active .route-shade{
@@ -158,7 +165,7 @@ footer p{color: #8F8F8F;line-height: .4rem;text-align: center;}
     opacity: .5;
     transition:.3s;
 }
-
+/*router-back*/
 .right-enter {
     z-index: 10;
     transform: translate3d(-100%,0,0);
@@ -182,4 +189,21 @@ footer p{color: #8F8F8F;line-height: .4rem;text-align: center;}
     display: block;
     opacity: .5;
     transition:.3s;
+}
+/*login*/
+.login-enter {
+    background-color: rgba(0,0,0,0) !important;
+}
+.login-enter.login-enter-active {
+    background-color: rgba(0,0,0,.5) !important;
+    transition: .25s
+}
+.login-enter #login-wrap{
+    transform: scale(1.3,1.1);
+    filter:blur(5px);
+}
+.login-enter.login-enter-active #login-wrap{
+    transform: scale(1,1);
+    filter:blur(0);
+    transition: .25s
 }

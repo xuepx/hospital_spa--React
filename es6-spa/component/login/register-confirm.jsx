@@ -1,70 +1,79 @@
 import '../../css/register-confirm.css';
 import React from 'react';
 import scroll from 'iscroll';
+import { connect } from 'react-redux';
 import { $,$Ajax,$Param,$Next } from '../../js/common';
 
 let iScroll;
 
-export default class RegisterConfirm extends React.Component{
-    state={
-        name:"",
-        birth:"请选择生日",
-        sex:"请选择性别",
-        marry:"请选择婚姻状况",
-        identity:{
-            value:"请选择证件类型",
-            id:NaN
-        },
-        idNum:"",
-        stay:"",
-        stayDetai:"",
-        tel:"",
-        code:"",
-        password:""
-    }
+@connect (
+    state => {return { loginInf:state.loginInf } }
+)
+export default class extends React.Component{
     componentDidMount(){
-        iScroll = new scroll('.P24 .scroll-wrapper',{click:true})
+        iScroll = new scroll('.scroll-wrapper',{click:true})
+    }
+    submit(){
+        let { loginInf } = this.props;
+        $Ajax("register",{
+            userName:loginInf.name,
+            gender:loginInf.sex,
+            maritalStatus:loginInf.marry,
+            birthday:loginInf.birth,
+            certificatesTypeId:loginInf.identity.id,
+            certificatesNumber:loginInf.idNum,
+            password:loginInf.password,
+            areaCode:loginInf.county.id,
+            areaInfo:loginInf.province.value+loginInf.city.value+loginInf.county.value,
+            nowAddress:loginInf.stay,
+            phoneNumber:loginInf.tel
+        },(data)=>{
+            localStorage.setItem("userId",data.obj.userId)
+            localStorage.setItem("userName",loginInf.name)
+            this.props.history.go(-2)
+        })
     }
     render() {
-        return (<div className="body-wrap P24">
+        const { loginInf } = this.props;
+        return (<div className="body-wrap P24"> <div className="route-shade"></div>
             <div className="scroll-wrapper">
                 <ul className="scroll">
                     <div>
                         <li>
                             <p>姓名</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.name}</span>
                         </li>
                         <li>
                             <p>性别</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.sex}</span>
                         </li>
                         <li>
                             <p>生日</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.birth}</span>
                         </li>
                         <li>
                             <p>证件类型</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.identity.value}</span>
                         </li>
                         <li>
                             <p>证件号码</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.idNum}</span>
                         </li>
                         <li>
                             <p>婚姻状况</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.marry}</span>
                         </li>
                         <li>
                             <p>地址</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.province.value+loginInf.city.value+loginInf.county.value+loginInf.stay}</span>
                         </li>
                         <li>
                             <p>手机号</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.tel}</span>
                         </li>
                         <li>
                             <p>注册密码</p>
-                            <span>XXXXXXXXXXXX</span>
+                            <span>{loginInf.password}</span>
                         </li>
                     </div>
                     <div id="tip-wrap">
@@ -73,7 +82,7 @@ export default class RegisterConfirm extends React.Component{
                     </div>
                 </ul>
             </div>
-            <a href="javascripy:;" id="submit">提交注册</a>
+            <a href="javascripy:;" id="submit" onClick={this.submit.bind(this)}>提交注册</a>
         </div>)
     }
 }

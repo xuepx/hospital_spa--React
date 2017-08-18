@@ -48,10 +48,10 @@ function init(){
 //config
 var $=new Object()
 $.reqHost='http://192.168.11.49:8452/guahao/wx/' 
-$.area=['西院区','东院区','北院区']
-$.org=[1,2,3]
+$.area=[]
+$.org=[]
 $.urlObj=$Parse(decodeURI(window.location.href))
-$.hosName=""
+$.hosName="清华长庚医院"
 $.copyright="Copyright ©2017 深圳医依帮网络技术有限公司"
 $.type=(function(){
             var ua = window.navigator.userAgent.toLowerCase();
@@ -63,9 +63,6 @@ $.type=(function(){
                 return 2;
             }
         })()
-
-//页面跳转
-function $Go(url){window.location.href=url}
 
 //页面正向翻页
 $.pageDirect=0
@@ -89,10 +86,10 @@ $Loading.remove=function(){
 }
 
 //AJAX请求
-function $Ajax(url,obj,fn){
+function $Ajax(url,obj,fn,fail){
     ajax("post",$.reqHost+url,$Param(obj),fn);
     function ajax(method, url, data, success,err) {
-        //$Loading();
+        $Loading();
         var xhr = new XMLHttpRequest();
         if (method == 'get' && data) {
             url += '?' + data;
@@ -109,8 +106,10 @@ function $Ajax(url,obj,fn){
                 $Loading.remove();
                 if ( xhr.status == 200 ) {
                     var data = eval("("+xhr.responseText+")");
-                    if(!data.success)alert(data.msg);
-                    if(success && data.success)return success( data );
+                    if(!data.success){
+                        fail ? fail() : alert(data.msg)
+                    }
+                    if(data.success && success) success( data );
                 } else {
                     err && err();
                 }
@@ -155,6 +154,16 @@ function $Time(tDate){
     return tDate.getFullYear()+'-'+tMonth+'-'+tDay
 }
 
+//时间格式化
+function $parseDate(date,fn){
+    var tMonth = date.getMonth()+1,
+        tDay = date.getDate();
+    tMonth < 10 ? tMonth = '0' + tMonth: null;
+    tDay < 10 ? tDay = '0' + tDay: null;
+    if(fn)fn();
+    return date.getFullYear()+'-'+tMonth+'-'+tDay
+}
+
 //手机号验证
 function $checkPhone(string){
     if(!(/^1[34578]\d{9}$/.test(string))){
@@ -175,4 +184,4 @@ function $Fuck(a){
 
 init()
 
-export {$,$Go,$Loading,$Ajax,$Param,$Parse,$Time,$Fuck,$Next,$checkPhone}
+export {$,$Loading,$Ajax,$Param,$Parse,$Time,$Fuck,$Next,$checkPhone,$parseDate}

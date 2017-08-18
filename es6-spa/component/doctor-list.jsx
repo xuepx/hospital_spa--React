@@ -1,25 +1,30 @@
 import '../css/doctor-list.css';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { connect } from 'react-redux';
+import { guahao } from '../store/actions';
 import scroll from 'iscroll';
 import { $,$Ajax,$Param } from '../js/common'
 
 let iScroll;
 
-export default class DoctorList extends React.Component{
+@connect (
+    state => {return { guahaoInf:state.guahaoInf } }
+)
+export default class extends React.Component{
     state = {
         docList:[]
     }
     componentWillMount(){
         $Ajax('getDoctorList',{
-            outDepId:$.urlObj.id
+            outDepId:this.props.guahaoInf.departId
         },(data)=>{
             this.setState({docList:data.obj})
             setTimeout(()=>{if(!data.obj.length)alert("该科室暂无医生介绍")},300)
         })
     }
     componentDidUpdate(){
-        iScroll = new scroll('#ul-wrapper',{click:true})
+        iScroll = new scroll('.scroll-wrapper',{click:true})
     }
     docLevel(id){
         switch(Number(id)){
@@ -54,7 +59,7 @@ export default class DoctorList extends React.Component{
             )
         })
         return (<div className="body-wrap P21">      <div className="route-shade"></div>
-            <div id="ul-wrapper">
+            <div className="scroll-wrapper">
                 <ul className="scroll">
                     {items}
                 </ul>

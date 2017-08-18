@@ -1,49 +1,68 @@
 import '../css/depart-list.css';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { connect } from 'react-redux';
+import { guahao } from '../store/actions';
 import scroll from 'iscroll';
 import { $,$Ajax,$Param,$Next } from '../js/common'
-import Login from './login/login.jsx'
 
-let iScroll,iScroll2;
+let iScroll,iScroll2,origin;
 
-export default class DepartList extends React.Component{
+@connect (
+    state => {return { guahaoInf:state.guahaoInf } }
+)
+export default class extends React.Component{
     state = {
         shadeAct:false,
         chooseBigDepartName:'',
         bigDepart:[],
         smallDepart:[]
     }
+    constructor(props){
+        super(props)
+        let type = props.match.params.type;
+        if(type == "guahao"){
+            origin = {
+                bigUrl : "getdept",
+                smallUrl : "getOutdept",
+                toPath : "/guahao-by-time"
+            }
+        }else if(type == "chaxun"){
+            origin = {
+                bigUrl : "getDepartmentList",
+                smallUrl : "getMenZhenList",
+                toPath : "/doctor-list"
+            }
+        }
+    }
     componentWillMount(){
-        $Ajax('getDepartmentList',{},(data)=>{
+        $Ajax(origin.bigUrl,{},(data)=>{
             this.setState({bigDepart:data.obj})
         })
     }
     componentDidMount(){
-        iScroll = new scroll('#ul-wrapper',{click:true})
+        iScroll = new scroll('.scroll-wrapper',{click:true})
     }
     componentDidUpdate(){
         if(this.state.shadeAct){
-            iScroll2 = new scroll('#ul-wrapper2',{click:true})
+            iScroll2 = new scroll('#shade-ul-wrapper',{click:true})
         }
     }
     getSmallDepart(id,name){
-        /*$Ajax('getMenZhenList',{
+        $Ajax(origin.smallUrl,{
             departmentId:id
         },(data)=>{
             this.setState({chooseBigDepartName:name,shadeAct:true,smallDepart:data.obj})
-        })*/
+        })
     }
     closeShade(){
         this.setState({shadeAct:false})
     }
     toDoctorList(id){
+        this.props.dispatch(guahao("departId",id))
         $Next();
         this.props.history.push({
-            pathname: '/doctor-list',
-            search:'?'+$Param({
-                id:id
-            })
+            pathname: origin.toPath
         })
     }
     render() {
@@ -60,11 +79,11 @@ export default class DepartList extends React.Component{
         shadeList;
         if(this.state.shadeAct) {
             shadeList = (
-                <div id="shade-wrapper">
+                <div className="shade-wrapper">
                     <p id="close-shade" onClick={this.closeShade.bind(this)}/>
                     <div id="shade-list">
                         <h3>{this.state.chooseBigDepartName}</h3>
-                        <div id="ul-wrapper2">
+                        <div id="shade-ul-wrapper">
                             <ul className="scroll">
                                 {items2}
                             </ul>
@@ -74,7 +93,7 @@ export default class DepartList extends React.Component{
             )
         }
         return (<div className="body-wrap P20">      <div className="route-shade"></div>
-            <div id="ul-wrapper">
+            <div className="scroll-wrapper">
                 <ul className="scroll">
                     {items}
                 </ul>
@@ -83,8 +102,6 @@ export default class DepartList extends React.Component{
             <ReactCSSTransitionGroup transitionName="shade">
                 {shadeList}
             </ReactCSSTransitionGroup>
-
-            <Login history={this.props.history}/>
 
             <footer>
                 <p>{$.hosName}</p>

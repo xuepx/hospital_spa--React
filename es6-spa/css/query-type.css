@@ -1,9 +1,0 @@
-/*query-type*/
-.P16 #wrap-1{height: .9rem;background-color: #FFFFFF;padding: 0 .3rem;padding-top:.15rem;}
-.P16 #wrap-1 div{height: .6rem;border: 1px solid #3f9ff3;border-radius: 4px;background: url("../img/serch.png")no-repeat left .11rem center;background-size: auto .32rem}
-.P16 #wrap-1 input{padding-left:.52rem;width:6.2rem;line-height:.6rem;font-size:16px;color:#888888;background: none;}
-.P16 #wrap-1 span{display: block;float: right;background:url("../img/exit.png")no-repeat center;background-size: auto .32rem;width:.6rem;height: .6rem}
-.P16 #search-type{margin-top: .2rem;overflow:hidden;border-top:1px solid #e5e5e5;}
-.P16 #search-type a{display:block;float: left;width: 50%;border-bottom:1px solid #e5e5e5;color:#6ab1f9;font-size: 16px;padding:1.84rem 0 .26rem;text-align: center}
-.P16 #search-type a:nth-child(1){border-right:1px solid #e5e5e5;background:url("../img/s-1.png")no-repeat top .47rem center;background-size: auto 1.22rem;}
-.P16 #search-type a:nth-child(2){background:url("../img/s-2.png")no-repeat top .47rem center;background-size: auto 1.22rem; }

@@ -1,3 +1,5 @@
+import { $parseDate } from '../js/common'
+
 export const pageGo = () => {
     return {
         type:'left'
@@ -10,18 +12,21 @@ export const pageBack = () => {
 }
 export const setInf = (key,val) => {
     return {
-        type:key,
-        value:val
+        type:"degister",
+        value:val,
+        key:key
     }
 }
-/*export function requestPosts() {
-    return function (dispatch)  {
-        setTimeout(
-            () => {dispatch({
-                type:"1",
-                id:333,
-                text:""
-            })},2000
-        )
+
+export const guahao = (key,val) => {
+    if(key=="time"){
+        let date = new Date();
+        date.setTime(val);
+        val = $parseDate(date)
     }
-}*/
+    return {
+        type:"guahao",
+        value:val,
+        key:key
+    }
+}

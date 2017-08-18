@@ -1,6 +1,3 @@
-/**
- * Created by appian on 2016/11/4.
- */
 (function (wid, dcm) {
 	var win = wid;
 	var doc = dcm;

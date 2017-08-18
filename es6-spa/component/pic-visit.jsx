@@ -7,7 +7,7 @@ import AskChat from './pic-visit/ask-chat.jsx';
 
 let DPI=devicePixelRatio,iScroll,iScroll2;
 
-export default class PayTable extends React.Component{
+export default class extends React.Component{
     state = {
         Act:['active',''],
         Act2:['active',''],

@@ -4,10 +4,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const compiler = webpack({
-    entry: {
+    entry: /*{
         family: ["react", "react-dom" ,"react-router-dom","react-redux","redux","redux-thunk","react-addons-css-transition-group","iscroll"],
         main : ["./entry.jsx"]
-    },
+    },*/"./entry.jsx",
     output:{
         path: path.resolve(__dirname, "./dist"),
         filename:"code.min.js"
@@ -43,14 +43,15 @@ const compiler = webpack({
             }
         ]
     },
+    //devtool:"cheap-module-eval-source-map",
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
+        /*new webpack.optimize.CommonsChunkPlugin({
             name: "family",
             filename: "family.min.js"
-        }),
+        }),*/
         new HtmlWebpackPlugin({
             template:'./temp.html',
-            filename:'./spa.html',
+            filename:'./index.html',
             inject:'body',
             minify:{
                 removeComments:true,
@@ -68,11 +69,17 @@ const compiler = webpack({
     ]
 });
 
-let num=0;
-const watching = compiler.watch({
-    aggregateTimeout: 300,
-    poll: undefined
-}, (err, stats) => {
+compiler.run((err, stats) => {
     if (err || stats.hasErrors())console.log(stats.compilation.errors);
-    else{console.log('package success : '+(++num))}
+    else{
+        console.log('set \'React\' package success!');
+        let num=0;
+        const watching = compiler.watch({
+            aggregateTimeout: 300,
+            poll: undefined
+        }, (err, stats) => {
+            if (err || stats.hasErrors())console.log(stats.compilation.errors);
+        else{console.log('package success : '+(++num))}
+        })
+    }
 })

@@ -5,7 +5,7 @@ import { $,$Ajax } from '../../js/common';
 const photo = require("../../img/ghjz-icon.png");
 //const photo2 = require("../../img/aphoto.png");
 
-export default class AskChat extends React.Component{
+export default class extends React.Component{
     static defaultProps = {
         obj:{
             canchoose : false,

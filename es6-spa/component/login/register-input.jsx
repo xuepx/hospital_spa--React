@@ -9,29 +9,21 @@ import DateSelector from '../../js/picker/date-picker';
 import MultiPicker from '../../js/picker/multi-picker';
 import { $,$Ajax,$Param,$Next,$checkPhone } from '../../js/common';
 
-let iScroll,timer;
+let iScroll,timer,Dispatch;
 
 @connect (
-    state => {return { loginInformation:state.loginInformation } }
+    state => {return { loginInf:state.loginInf } }
 )
-export default class Register extends React.Component{
+export default class extends React.Component{
     state={
-        countDown:"获取验证码",
-        province:{
-            value:"---选择省---",
-            id:NaN
-        },
-        city:{
-            value:"---选择市---",
-            id:NaN
-        },
-        county:{
-            value:"---选择县/辖区---",
-            id:NaN
-        }
+        countDown:"获取验证码"
+    }
+    constructor(props){
+        super(props)
+        Dispatch = props.dispatch
     }
     componentDidMount(){
-        iScroll = new scroll('.P23 .scroll-wrapper',{click:true})
+        iScroll = new scroll('.scroll-wrapper',{click:true})
         let nowTime=new Date();
         new DateSelector({ 
             input:"choose-date",
@@ -42,7 +34,7 @@ export default class Register extends React.Component{
             endTime: [nowTime.getFullYear(), nowTime.getMonth()+1, nowTime.getDate()],
             recentTime: [nowTime.getFullYear(), nowTime.getMonth()+1, nowTime.getDate()],
             success:(arr1,arr2)=>{
-                this.setState({birth:arr2[0]+'-'+arr2[1]+'-'+arr2[2]})
+                Dispatch( action.setInf("birth",arr2[0]+'-'+arr2[1]+'-'+arr2[2]) )
             }
         });
         new MultiPicker({ 
@@ -50,7 +42,7 @@ export default class Register extends React.Component{
             container:"select-2",
             jsonData:pickerData1,
             success:(arr)=>{
-                this.setState({sex:arr[0].value})
+                Dispatch( action.setInf("sex",arr[0].value) )
             }
         });
         new MultiPicker({ 
@@ -58,7 +50,7 @@ export default class Register extends React.Component{
             container:"select-3",
             jsonData:pickerData2,
             success:(arr)=>{
-                this.setState({identity:arr[0]})
+                Dispatch( action.setInf("identity",arr[0]) )
             }
         });
         new MultiPicker({ 
@@ -66,7 +58,7 @@ export default class Register extends React.Component{
             container:"select-4",
             jsonData:pickerData3,
             success:(arr)=>{
-                this.setState({marry:arr[0].value})
+                Dispatch( action.setInf("marry",arr[0].value) )
             }
         });
         $Ajax("getDictArea",{},(data)=>{
@@ -75,7 +67,9 @@ export default class Register extends React.Component{
                 container:"select-5",
                 jsonData:data.obj,
                 success:(arr)=>{
-                    this.setState({province:arr[0],city:{value:"---选择市---",id:NaN},county:{value:"---选择县/辖区---",id:NaN}})
+                    Dispatch( action.setInf("province",arr[0]) )
+                    Dispatch( action.setInf("city",{value:"---选择市---",id:NaN}) )
+                    Dispatch( action.setInf("cpunty",{value:"---选择县/辖区---",id:NaN}) )
                     this.getCity(arr[0].id.substr(0,2))
                 }
             })
@@ -83,22 +77,48 @@ export default class Register extends React.Component{
     }
     setInf(type,e){
         let val = e.target.value,
-            key;
-        switch(type){
-            case "name" : key=type;break;
-            case "idNum" : key=type;break;
-            case "stayDeail" : key=type;break;
-            case "tel" : key=type;break;
-            case "code" : key=type;break;
-            case "password" : key=type;break;
-        }
-        this.props.dispatch(action.setInf(key,val))
+            key = type;
+        Dispatch(action.setInf(key,val))
     }
     registerConfirm(){
-        $Next();
-        this.props.history.push({
-            pathname:"/register-confirm"
-        })
+        let { loginInf } = this.props;
+        if( !loginInf.name ){
+            alert("请填写姓名");   return;
+        }else if( loginInf.sex == "请选择性别" ){
+            alert("请选择性别");   return;
+        }else if( loginInf.birth == "请选择生日" ){
+            alert("请选择生日");   return;
+        }else if( !loginInf.identity.id ){
+            alert("请选择证件类型");   return;
+        }else if( !loginInf.idNum ){
+            alert("请填写证件号");   return;
+        }else if( loginInf.marry == "请选择婚姻状况" ){
+            alert("请选择婚姻状况");   return;
+        }else if( !loginInf.province.id ){
+            alert("请选择省");   return;
+        }else if( !loginInf.city.id ){
+            alert("请选择市");   return;
+        }else if( !loginInf.county.id ){
+            alert("请选择县/辖区");   return;
+        }else if( !loginInf.stay ){
+            alert("请填写详细地址");   return;
+        }else if( !(loginInf.password.length>=6) ){
+            alert("密码必须大于等于6位数");   return;
+        }else if( !$checkPhone(loginInf.tel) ){
+            alert("请填写正确手机号");   return;
+        }else if( !loginInf.code ){
+            alert("请填写验证码");   return;
+        }
+        $Ajax("checkMobileMsgCode",{
+            phoneNumber:loginInf.tel,
+            dxcode:loginInf.code
+        },(data)=>{
+            $Next();
+            this.props.history.push({
+                pathname:"/register-confirm",
+                state:this.props.location.state
+            })
+        });
     }
     getCity(id){
         $Ajax("getDictArea",{
@@ -109,7 +129,8 @@ export default class Register extends React.Component{
                 container:"select-6",
                 jsonData:data.obj,
                 success:(arr)=>{
-                    this.setState({city:arr[0],county:{value:"---选择县/辖区---",id:NaN}})
+                    Dispatch( action.setInf("city",arr[0]) )
+                    Dispatch( action.setInf("county",{value:"---选择县/辖区---",id:NaN}) )
                     this.getCounty(arr[0].id.substr(0,4))
                 }
             })
@@ -124,13 +145,14 @@ export default class Register extends React.Component{
                 container:"select-7",
                 jsonData:data.obj,
                 success:(arr)=>{
-                    this.setState({county:arr[0]})
+                    Dispatch( action.setInf("county",arr[0]) )
                 }
             })
         })
     }
     getCode(){
-        if(!$checkPhone(this.state.tel)){
+        if(timer)return
+        if(!$checkPhone(this.props.loginInf.tel)){
             alert("请输入正确的手机号码！")
             return
         }
@@ -140,77 +162,79 @@ export default class Register extends React.Component{
             timer = setInterval(()=>{
                 let time = parseInt(this.state.countDown);
                 if(time==0){
-                    this.setState({countDown:"获取验证码"})
-                    clearInterval(timer)
+                    this.setState({countDown:"获取验证码"});
+                    clearInterval(timer);
+                    timer=null;
+                    return
                 }
                 if(Number(time)){
                     time -= 1; time += "s"
                 }else{
-                    time = "60s"
+                    time = "30s"
                 }
                 this.setState({countDown:time})
             },1000)
         })
     }
     render() {
-        const { loginInformation } = this.props;
-        return (<div className="body-wrap P23">
+        const { loginInf } = this.props;
+        return (<div className="body-wrap P23"> <div className="route-shade"></div>
             <div className="scroll-wrapper">
                 <ul className="scroll">
                     <div>
                         <li>
                             <p>姓名</p>
-                            <input placeholder="请输入姓名" value={loginInformation.name} onChange={this.setInf.bind(this,"name")} />
+                            <input placeholder="请填写就诊人真实姓名" value={loginInf.name} onChange={this.setInf.bind(this,"name")} />
                         </li>
                         <li className="choose">
                             <p>性别</p>
-                            <span id="choose-sex">{loginInformation.sex}</span>
+                            <span id="choose-sex">{loginInf.sex}</span>
                         </li>
                         <li className="choose">
                             <p>生日</p>
-                            <span id="choose-date">{loginInformation.birth}</span>
+                            <span id="choose-date">{loginInf.birth}</span>
                         </li>
                         <li className="choose">
                             <p>证件类型</p>
-                            <span id="choose-card-type">{loginInformation.identity.value}</span>
+                            <span id="choose-card-type">{loginInf.identity.value}</span>
                         </li>
                         <li>
                             <p>证件号码</p>
-                            <input placeholder="请输入证件号码" value={loginInformation.idNum} onChange={this.setInf.bind(this,"idNum")} />
+                            <input placeholder="请填写就诊人有效证件号码" type="number" value={loginInf.idNum} onChange={this.setInf.bind(this,"idNum")} />
                         </li>
                         <li className="choose">
                             <p>婚姻状况</p>
-                            <span id="choose-marry">{loginInformation.marry}</span>
+                            <span id="choose-marry">{loginInf.marry}</span>
                         </li>
                         <li id="pos-wrap">
                             <p>现居住</p>
                             <div id="select-pos">
                                     <p>
-                                        <b className="pos-icon"></b><b className="pos-choose" id="province">{this.state.province.value}</b>
+                                        <b className="pos-icon"></b><b className="pos-choose" id="province">{loginInf.province.value}</b>
                                     </p>
                                     <p>
-                                        <b className="pos-icon"></b><b className="pos-choose" id="city">{this.state.city.value}</b>
+                                        <b className="pos-icon"></b><b className="pos-choose" id="city">{loginInf.city.value}</b>
                                     </p>
                                     <p>
-                                        <b className="pos-icon"></b><b className="pos-choose" id="county">{this.state.county.value}</b>
+                                        <b className="pos-icon"></b><b className="pos-choose" id="county">{loginInf.county.value}</b>
                                     </p>
                             </div>
                         </li>
                         <li>
                             <p>详细地址</p>
-                            <input placeholder="请填写详细地址" value={loginInformation.stayDetai} onChange={this.setInf.bind(this,"stayDetail")} />
+                            <input placeholder="请填写详细地址" value={loginInf.stay} onChange={this.setInf.bind(this,"stay")} />
                         </li>
                     </div>
                     <div>
                         <li>
                             <p>密码</p>
-                            <input placeholder="请输入注册密码" type="password"  value={loginInformation.password} onChange={this.setInf.bind(this,"password")} />
+                            <input placeholder="请输入注册密码" type="password"  value={loginInf.password} onChange={this.setInf.bind(this,"password")} />
                         </li>
                     </div>
                     <div>
                         <li>
                             <p>手机号</p>
-                            <input placeholder="请输入手机号" type="number" value={loginInformation.tel} onChange={this.setInf.bind(this,"tel")} />
+                            <input placeholder="请输入就诊人手机号" type="number" value={loginInf.tel} onChange={this.setInf.bind(this,"tel")} />
                         </li>
                         <li>
                             <span id="get-code" onClick={this.getCode.bind(this)}>{this.state.countDown}</span>

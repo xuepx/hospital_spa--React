@@ -1,7 +1,0 @@
-/*hospitalization-pay*/
-.P6 #area{top: 0;margin-left: .27rem;width:6.96rem;z-index: 1}
-.P6 #area li{width: 3.48rem;background-color: #FFFFFF;line-height: 1rem;font-size: 18px;text-align: center;float: left;white-space: nowrap;overflow: hidden;text-overflow :ellipsis}
-.P6 #area li.active{background-color: #78c3e9;color: #FFFFFF}
-.P6 #number{background-color: #FFFFFF;border:1px solid #e5e5e5;margin: .2rem .26rem;padding-left: .26rem}
-.P6 #number p{line-height: .9rem;float: left;font-size: 16px;}
-.P6 input{line-height: .7rem;float: left;margin-top: .1rem;font-size: 16px;margin-left: 10px;width: 4.6rem}

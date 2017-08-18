@@ -1,8 +1,0 @@
-/*query-list*/
-.P15 header{background: #FFFFFF;font-size: 18px;height: .9rem;line-height: .9rem;text-align: center;border-bottom: 1px solid #e}
-.P15 header span{color: #3f9ff3}
-.P15 ul{overflow: auto;position: absolute;top: .9rem;bottom:1rem;width: 100%}
-.P15 li{margin-bottom: .22rem;}
-.P15 li h3{background-color: #3f9ff3;color: #FFFFFF;font-size: 16px;line-height: .9rem;padding: 0 .26rem;}
-.P15 li p{background-color: #FFFFFF;font-size: 16px;line-height: .9rem;padding: 0 .26rem;border-bottom: 1px solid #e5e5e5}
-.P15 li p span{color: #888888}

@@ -1,0 +1,14 @@
+.P18 .doc-list:nth-of-type(1){border-top:1px solid #eeeeee;}
+.P18 .doc-img{display:block;float:left;border-radius: 50%;width: 1.2rem;height: 1.2rem;margin: .27rem .3rem;;background: url('../img/photo.png')no-repeat center;background-size: cover}
+.P18 .doclist-wrap{padding:.3rem .6rem .2rem 0;float: left;}
+.P18 .doclist-wrap p{min-height: .4rem;width: 5.1rem;text-align: justify;margin-top:.17rem}
+.P18 .wrap2{margin: .05rem 0 .025rem;color: #7f167b;font-weight: bold;}
+.P18 .wrap1 h4{font-size: 18px;line-height: 18px;padding-right: .2rem;display: inline-block;}
+.P18 .wrap1 span{padding-left: .2rem;border-left: 1px solid #a1a0a0;line-height: 15px;display: inline-block;color: #888888}
+.P18 .wrap3{color: #888888;line-height: 20px}
+.P18 .source-wrapper{padding:0 .3rem;background-color: #ffffff;float: left;width: 100%;border-bottom:1px solid #eeeeee;border-top:1px solid #eeeeee;}
+.P18 .source-wrapper li{overflow:hidden;position: relative;border-bottom: 1px solid #eeeeee;background: url('../img/next-normal.png')no-repeat right center;background-size: auto .3rem;}
+.P18 .source-wrapper li:nth-last-of-type(1){border:none}
+.P18 .time{float: left;color: #191919;line-height: .8rem}
+.P18 .price{float: left;color: #949494;line-height: .8rem;padding-left:.25rem}
+.P18 .surplus{position: absolute;color: #7f167b;line-height: .33rem;border:1px solid #7f167b;border-radius: 3px;font-size: 12px;padding: 0 5px;top: .235rem;right: .5rem}

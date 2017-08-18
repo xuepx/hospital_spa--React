@@ -5,7 +5,7 @@ import { $,$Ajax,$Param,$Next } from '../js/common'
 
 let iScroll;
 
-export default class DepartList extends React.Component{
+export default class extends React.Component{
     state = {
         text:{}
     }
@@ -15,12 +15,12 @@ export default class DepartList extends React.Component{
         })
     }
     componentDidUpdate(){
-        iScroll = new scroll('#ul-wrapper',{click:true})
+        iScroll = new scroll('.scroll-wrapper',{click:true})
     }
     render() {
         let text=this.state.text;
         return (<div className="body-wrap P22">      <div className="route-shade"></div>
-            <div id="ul-wrapper">
+            <div className="scroll-wrapper">
                 <ul className="scroll">
                     <img src={text.hosPic}/>
                     <h3>医院简介</h3>
