@@ -1,4 +1,4 @@
-import '../../css/register.css';
+import '../../css/register-input.css';
 import '../../js/picker/date-picker.css';
 import '../../js/picker/multi-picker.css';
 import React from 'react';
@@ -20,7 +20,8 @@ export default class extends React.Component{
     }
     constructor(props){
         super(props)
-        Dispatch = props.dispatch
+        Dispatch = props.dispatch;
+        document.title="填写注册信息"
     }
     componentDidMount(){
         iScroll = new scroll('.scroll-wrapper',{click:true})

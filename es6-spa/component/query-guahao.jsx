@@ -12,6 +12,10 @@ export default class extends React.Component{
         loginDisplay:false,
         guahaoList:[]
     }
+    constructor(){
+        super()
+        document.title="挂号记录查询"
+    }
     componentWillMount(){
         setTimeout(() => this.getGuahaoList(),300)
     }
@@ -37,8 +41,8 @@ export default class extends React.Component{
                 ghId:item.ghId
             },(data)=>{
                 alert("取消成功")
-                this.state.guahaoList.forEach((item,i)=>{
-                    if(item.ghId==id){
+                this.state.guahaoList.forEach((val,i)=>{
+                    if(item.ghId==val.ghId){
                         this.state.guahaoList.splice(i,1)
                     }
                 })
@@ -81,12 +85,9 @@ export default class extends React.Component{
                 </li>
             )
         });
-        let login = () => {
-            if(this.state.loginDisplay){
-                return (
-                    <Login from="guahao-by-time" history={this.props.history} callback={this.closeLoginThen.bind(this)}/>
-                )
-            }
+        let login;
+        if(this.state.loginDisplay){
+            login = <Login from="guahao-by-time" history={this.props.history} callback={this.closeLoginThen.bind(this)}/>
         }
         return (<div className="body-wrap P16">      <div className="route-shade"></div>
             <div className="scroll-wrapper">
@@ -96,13 +97,10 @@ export default class extends React.Component{
             </div>
 
             <ReactCSSTransitionGroup transitionName="login">
-                {login()}
+                {login}
             </ReactCSSTransitionGroup>
 
-            <footer>
-                <p>{$.hosName}</p>
-                <p>{$.copyright}</p>
-            </footer>
+            <footer><p>{$.copyright}</p></footer>
         </div>)
     }
 }

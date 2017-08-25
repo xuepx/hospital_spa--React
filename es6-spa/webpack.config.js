@@ -4,10 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const compiler = webpack({
-    entry: /*{
-        family: ["react", "react-dom" ,"react-router-dom","react-redux","redux","redux-thunk","react-addons-css-transition-group","iscroll"],
-        main : ["./entry.jsx"]
-    },*/"./entry.jsx",
+    entry: "./entry.jsx",
     output:{
         path: path.resolve(__dirname, "./dist"),
         filename:"code.min.js"
@@ -45,10 +42,6 @@ const compiler = webpack({
     },
     //devtool:"cheap-module-eval-source-map",
     plugins: [
-        /*new webpack.optimize.CommonsChunkPlugin({
-            name: "family",
-            filename: "family.min.js"
-        }),*/
         new HtmlWebpackPlugin({
             template:'./temp.html',
             filename:'./index.html',

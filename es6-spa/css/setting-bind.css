@@ -1,0 +1,11 @@
+.P14{background: #f0f0f5}
+.P14 div{padding-left:.3rem;background: #ffffff;margin-bottom: .2rem;border-bottom:1px solid #dddddd;border-top:1px solid #dddddd}
+.P14 div:nth-of-type(1){border-top: none}
+.P14 li{height: .86rem;border-bottom:1px solid #dddddd;overflow: hidden;position: relative;}
+.P14 #last{border:none}
+.P14 p{line-height:.86rem;float: left;}
+.P14 input,.P14 span{height:.86rem;position: absolute;top: 0;left: 2.4rem;line-height: 18px;width: 4.2rem}
+.P14 span{line-height: .86rem}
+.P14 #test-code{left: 0}
+.P14 #get-code{right: .3rem;width: auto;text-align: right;color: #7f167b;text-decoration: underline;left: initial}
+.P14 #bind{display: block;line-height: .7rem;font-size: 16px;color: #FFFFFF;background-color: #7F167B;border-radius: 5px;width: 60%;margin: .6rem auto;text-align: center}

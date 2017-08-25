@@ -8,12 +8,14 @@ import Index from '../index.jsx';
 import GuahaoByTime from '../component/guahao-by-time.jsx';
 import GuahaoConfirm from '../component/guahao-confirm.jsx';
 import QueryGuahao from '../component/query-guahao.jsx';
-import PicVisit from '../component/pic-visit.jsx';
 import DepartList from '../component/depart-list.jsx';
 import DoctorList from '../component/doctor-list.jsx';
+import doctorIntroduce from '../component/doctor-introduce.jsx';
 import HospitalIntroduce from '../component/hospital-introduce.jsx';
 import RegisterInput from '../component/login/register-input.jsx';
 import RegisterConfirm from '../component/login/register-confirm.jsx';
+import Setting from '../component/setting.jsx';
+import SettingBind from '../component/setting-bind.jsx';
 
 @connect (
     state => {return {routecss:state.routecss} } 
@@ -37,10 +39,12 @@ class Main extends React.Component {
                                 <Route location={location} path="/query-guahao" component={QueryGuahao}/>
                                 <Route location={location} path="/depart-list/:type" component={DepartList}/>
                                 <Route location={location} path="/doctor-list" component={DoctorList}/>
+                                <Route location={location} path="/doctor-introduce" component={doctorIntroduce}/>
                                 <Route location={location} path="/hospital-introduce" component={HospitalIntroduce}/>
                                 <Route location={location} path="/register-input" component={RegisterInput}/>
                                 <Route location={location} path="/register-confirm" component={RegisterConfirm}/>
-                                <Route location={location} path="/pic-visit" component={PicVisit}/>
+                                <Route location={location} path="/setting" component={Setting}/>
+                                <Route location={location} path="/setting-bind" component={SettingBind}/>
                             </div>
                         </ReactCSSTransitionGroup>
                     )

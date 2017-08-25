@@ -10,12 +10,18 @@ let iScroll;
     state => {return { loginInf:state.loginInf } }
 )
 export default class extends React.Component{
+    constructor(){
+        super()
+        document.title="确认注册信息"
+    }
     componentDidMount(){
         iScroll = new scroll('.scroll-wrapper',{click:true})
     }
     submit(){
         let { loginInf } = this.props;
         $Ajax("register",{
+            openId:$.openId,
+            environment:$.type,
             userName:loginInf.name,
             gender:loginInf.sex,
             maritalStatus:loginInf.marry,

@@ -1,0 +1,5 @@
+.P15{background-color: #f0f0f5}
+.P15 .scroll-wrapper li{background-color: #FFFFFF;padding-left: .3rem}
+.P15 .scroll-wrapper li span{display: block;border-bottom: 1px solid #e8e8e8;font-size: 14px;color: #333333;line-height: .9rem;background: url('../img/next-normal.png')no-repeat right .3rem center;background-size: auto .3rem;padding-right: .3rem}
+.P15 .scroll-wrapper li span:after{content:"";border-left: 5px solid #7F167B;margin-right:10px;height: 16px;float: left;position: relative;top:calc((.9rem - 17px)/2)}
+.P15 .scroll-wrapper li:nth-last-child(1) span,.P20 .shade-wrapper ul li:nth-last-child(1) span{border: none}

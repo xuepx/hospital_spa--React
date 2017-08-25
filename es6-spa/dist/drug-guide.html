@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title>用药提醒</title>
+<script>document.getElementsByTagName('html')[0].style.fontSize=document.documentElement.clientWidth/7.5+'px';</script>
+<style>
+body, html, div, blockquote, img, label, p, h1, h2, h3, h4, h5, h6, pre, ul, ol,li, dl, dt, dd, form, a, fieldset, input, th, td,textarea{margin: 0; padding: 0; border: 0; outline:none;font-size:14px; font-family:Arial,Microsoft Yahei; text-decoration:none}
+*{box-sizing: border-box;}
+ul,ol,li{list-style: none;color: #333333}
+b,i{ font-style:normal; font-weight:normal}
+body{padding: .3rem 0}
+html,body{height: 100%}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+a{-webkit-tap-highlight-color:rgba(0,0,0,0);}
+
+h2{color: #232323;font-size: 15px;line-height: 22px;margin: 0 .2rem}
+h3{color: #666666;font-size: 15px;line-height: 22px;margin: 0 .2rem}
+.drug-wrap{margin:.3rem .2rem}
+.drug-wrap p{height: .6rem;line-height: .6rem;background-color: #8064a1;color: #FFFFFF;font-weight: bold;text-align: center}
+.drug-wrap table{border-collapse: collapse;border: 1px solid #e0d9e6;}
+td{width: 70%;text-align:justify;padding: 5px;color: #393939}
+tr:nth-of-type(2n) td{background-color: #e6e0ec}
+.td-1{border-right: 1px solid #e0d9e6;width: 30%;color: #999999}
+#tip{border-top:.23rem solid #e6e6e6;padding:.2rem .3rem}
+#tip h4{font-size: 15px; margin-bottom: .2rem}
+#tip p{color: #666666}
+#tip p span{color:#7f167b}
+img{margin: 0 auto;display: block}
+</style>
+</head>
+<body>
+<h2>用药提醒小助手给您发提醒啦!</h2>
+<h3>您扫描的药袋对应药嘱药品简要信息如下:</h3>
+<div id="drug-wrap">
+    <div class="drug-wrap">
+        <p>药名</p>
+        <table>
+            <tr>
+                <td class="td-1">临床用途</td>
+                <td>补气活血，益肝健肾，养心安神。</td>
+            </tr>
+            <tr>
+                <td class="td-1">副作用</td>
+                <td>补气活血，益肝健肾，养心安神。治疗气血虚弱，肝肾不足所致的胸闷气短</td>
+            </tr>
+            <tr>
+                <td class="td-1">注意事项</td>
+                <td>1.忌辛辣、生冷、油腻食物。2.感冒发热病人不宜服用。3.本品宜饭前服用。4.高血压、心脏病、肝病、糖尿病、肾病等慢性病患者应在医师指导下服用。</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div id="tip">
+    <h4>提示</h4>
+    <p>1、以上信息均依药品说明书作简单摘要，不可作为用药指导，敬遵医嘱;<br/>
+2、如有疑问，详询我院药剂科或拨打药物咨询热线010-56118555<br/>
+3、需获得个性化用药提醒服务，请关注并绑定我院公众服务号。<span>详情请长按下方二维码：</span></p>
+</div>
+<img src="img/qrcode.jpg" width="50%">
+</body>
+</html>

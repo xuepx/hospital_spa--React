@@ -28,7 +28,7 @@ function init(){
         }else{
             code=ob.auth_code;
         }
-        /*$Ajax('commonRestController.do?userInfoGetSuper',{
+        $Ajax('userInfoGetSuper',{
             environment:environment,
             code:code ? code : '',
             returnUrl:code ? '' :  encodeURIComponent(window.location.href)
@@ -41,13 +41,13 @@ function init(){
                 localStorage.setItem('openId',$.openId);
                 localStorage.setItem('photoUrl',$.photoUrl)
             }
-        })*/
+        })
     }
 }
 
 //config
 var $=new Object()
-$.reqHost='http://192.168.11.49:8452/guahao/wx/' 
+$.reqHost='http://192.168.11.49:8452/guahao/wx/' || 'http://123.59.26.153:8088/guahao/wx/'
 $.area=[]
 $.org=[]
 $.urlObj=$Parse(decodeURI(window.location.href))

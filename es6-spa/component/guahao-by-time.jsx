@@ -19,9 +19,10 @@ export default class extends React.Component{
         loginDisplay:false,
         docList:[]
     }
-    constructor(props){
+    constructor(props){ 
         super(props)
-        Dispatch = props.dispatch
+        Dispatch = props.dispatch;
+        document.title="预约挂号(选择医生)"
     }
     componentWillMount(){
         setTimeout(() => this.getDocList(),300)
@@ -146,11 +147,6 @@ export default class extends React.Component{
             <ReactCSSTransitionGroup transitionName="login">
                 {login()}
             </ReactCSSTransitionGroup>
-
-            <footer>
-                <p>{$.hosName}</p>
-                <p>{$.copyright}</p>
-            </footer>
         </div>)
     }
 }

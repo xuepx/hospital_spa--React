@@ -1,0 +1,9 @@
+.P25 .doc-list{border-bottom:1px solid #eeeeee;background:/* url('../img/next.png')no-repeat right .3rem center*/ #ffffff;background-size: auto .3rem;}
+.P25 .doc-img{display:block;float:left;border-radius: 50%;width: 1.2rem;height: 1.2rem;margin: .27rem .3rem;}
+.P25 .doclist-wrap{padding:.3rem .6rem .2rem 0;float: left;}
+.P25 .doclist-wrap p{min-height: .4rem;width: 5.1rem;text-align: justify;}
+.P25 .wrap2{margin: .05rem 0 .025rem;color: #7f167b;font-weight: bold;}
+.P25 .wrap1 h4{font-size: 18px;line-height: 18px;padding-right: .2rem;display: inline-block;vertical-align:middle}
+.P25 .wrap1 span{padding-left: .2rem;border-left: 1px solid #a1a0a0;line-height: 15px;display: inline-block;color: #888888}
+.P25 .scroll h3{font-weight: normal;font-size: 16px;margin: .2rem;padding:0 .3rem;border-left: 2px solid #7f167b;color: #7f167b;padding-left: .2rem;line-height: 16px}
+.P25 .scroll .detail{padding: 0 .3rem;vertical-align: justify;color: #585b60;text-indent: 2em}

@@ -22,16 +22,25 @@ export default class extends React.Component{
         super(props)
         let type = props.match.params.type;
         if(type == "guahao"){
+            document.title="预约挂号(选择科室)"
             origin = {
                 bigUrl : "getdept",
                 smallUrl : "getOutdept",
                 toPath : "/guahao-by-time"
             }
-        }else if(type == "chaxun"){
+        }else if(type == "chaxun-doc"){
+            document.title="医生信息查询(选择科室)"
             origin = {
                 bigUrl : "getDepartmentList",
                 smallUrl : "getMenZhenList",
                 toPath : "/doctor-list"
+            }
+        }else if(type == "chaxun-dep"){
+            document.title="科室信息查询"
+            origin = {
+                bigUrl : "getDepartmentList",
+                smallUrl : "getMenZhenList",
+                toPath : "/hospital-introduce"
             }
         }
     }
@@ -62,11 +71,13 @@ export default class extends React.Component{
         this.props.dispatch(guahao("departId",id))
         $Next();
         this.props.history.push({
-            pathname: origin.toPath
+            pathname: origin.toPath,
+            state:"chaxun-dep"
         })
     }
     render() {
-        let items = this.state.bigDepart.map((item,i)=>{
+        let foot = this.props.match.params.type == "guahao",
+        items = this.state.bigDepart.map((item,i)=>{
             return (
                 <li key={item.departmentId} onClick={this.getSmallDepart.bind(this,item.departmentId,item.departmentName)}><span>{item.departmentName}</span></li>
             )
@@ -93,7 +104,7 @@ export default class extends React.Component{
             )
         }
         return (<div className="body-wrap P20">      <div className="route-shade"></div>
-            <div className="scroll-wrapper">
+            <div className="scroll-wrapper" style={{bottom:foot?".5rem":"0"}}>
                 <ul className="scroll">
                     {items}
                 </ul>
@@ -103,10 +114,7 @@ export default class extends React.Component{
                 {shadeList}
             </ReactCSSTransitionGroup>
 
-            <footer>
-                <p>{$.hosName}</p>
-                <p>{$.copyright}</p>
-            </footer>
+            {foot && <footer><p>{$.copyright}</p></footer>}
         </div>)
     }
 }

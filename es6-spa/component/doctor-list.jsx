@@ -1,10 +1,9 @@
 import '../css/doctor-list.css';
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import { guahao } from '../store/actions';
 import scroll from 'iscroll';
-import { $,$Ajax,$Param } from '../js/common'
+import { $,$Ajax,$Param,$Next } from '../js/common'
 
 let iScroll;
 
@@ -14,6 +13,10 @@ let iScroll;
 export default class extends React.Component{
     state = {
         docList:[]
+    }
+    constructor(){
+        super()
+        document.title="医生列表"
     }
     componentWillMount(){
         $Ajax('getDoctorList',{
@@ -25,6 +28,15 @@ export default class extends React.Component{
     }
     componentDidUpdate(){
         iScroll = new scroll('.scroll-wrapper',{click:true})
+    }
+    toDoctorList(item){
+        $Next()
+        this.props.history.push({
+            pathname:"/doctor-introduce",
+            state:{
+                item:item
+            }
+        })
     }
     docLevel(id){
         switch(Number(id)){
@@ -41,7 +53,7 @@ export default class extends React.Component{
                 backgroundSize:"cover"
             }
             return (
-                <li className="doc-list clearfix">
+                <li className="doc-list clearfix" onClick={this.toDoctorList.bind(this,item)}>
                     <span className="doc-img" style={img}></span>
                     <div className="doclist-wrap">
                         <p className="wrap1">
@@ -51,9 +63,9 @@ export default class extends React.Component{
                         <p className="wrap2">
                             {item.outDepName}
                         </p>
-                        <p className="wrap3">
+                        {/*<p className="wrap3">
                             {item.doctorExpertise}
-                        </p>
+                        </p>*/}
                     </div>
                 </li>
             )
@@ -64,11 +76,6 @@ export default class extends React.Component{
                     {items}
                 </ul>
             </div>
-
-            <footer>
-                <p>{$.hosName}</p>
-                <p>{$.copyright}</p>
-            </footer>
         </div>)
     }
 }

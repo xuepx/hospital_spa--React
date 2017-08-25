@@ -10,6 +10,10 @@ let iScroll;
     state => {return { guahaoInf:state.guahaoInf } }
 )
 export default class extends React.Component{
+    constructor(){
+        super()
+        document.title="确认挂号信息"
+    }
     componentDidMount(){
         iScroll = new scroll('.scroll-wrapper',{click:true})
     }
@@ -30,7 +34,7 @@ export default class extends React.Component{
                   "初诊病患及首次以医保身份于本院就医病患，请于就诊当天至少提前15分钟携身份证、社保卡等至门诊大厅挂号窗口建档、取号。"+
                   "温馨提示：因故不能就诊，请于周一至周五8:00-11:30 12:30-16:30拨打我院人工电话56118899-1进行取消，否则按爽约处理。")
             $Next();
-            this.props.history.push({
+            this.props.history.replace({
                 pathname : "/query-guahao"
             })
         })
