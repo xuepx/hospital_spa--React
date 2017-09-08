@@ -8,3 +8,4 @@
 ---
 该项目为各大医院支付宝微信生活、服务号线上项目，无法在线预览。此React源码仅分享给大家学习交流<br>
 如需预览类似静态DEMO，可移步[hospital-app-by-Vue](https://github.com/yukilzw/hospital-app-by-Vue)，基于vue全家桶构建（重点在于MVVM思路，样式较为简陋）
+---
