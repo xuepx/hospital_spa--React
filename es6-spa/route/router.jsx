@@ -16,6 +16,8 @@ import RegisterInput from '../component/login/register-input.jsx';
 import RegisterConfirm from '../component/login/register-confirm.jsx';
 import Setting from '../component/setting.jsx';
 import SettingBind from '../component/setting-bind.jsx';
+import Subscription from '../component/subscription.jsx';
+import PicVisit from '../component/pic-visit.jsx';
 
 @connect (
     state => {return {routecss:state.routecss} } 
@@ -45,6 +47,8 @@ class Main extends React.Component {
                                 <Route location={location} path="/register-confirm" component={RegisterConfirm}/>
                                 <Route location={location} path="/setting" component={Setting}/>
                                 <Route location={location} path="/setting-bind" component={SettingBind}/>
+                                <Route location={location} path="/subscription" component={Subscription}/>
+                                <Route location={location} path="/pic-visit" component={PicVisit}/>
                             </div>
                         </ReactCSSTransitionGroup>
                     )

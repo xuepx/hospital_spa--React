@@ -14,19 +14,16 @@ export default class extends React.Component{
         text:{}
     }
     componentWillMount(){
-        let type = this.props.location.state;
-        if(type == "chaxun-dep"){
+        let state = this.props.location.state;
+        console.log(state)
+        if(state && state.type == "chaxun-dep"){
             document.title="科室简介"
-            $Ajax('getMenZhenList',{
-                outDepId : this.props.guahaoInf.departId
-            },(data)=>{
-                this.setState({text:data.obj})
-                let img = new Image();
-                img.src=data.obj.departmentPic
-                img.onload=()=>{
-                    iScroll.refresh()
-                }
-            })
+            this.setState({text:state.item})
+            let img = new Image();
+            img.src=state.item.departmentPic
+            img.onload=()=>{
+                iScroll.refresh()
+            }
         }else{
             document.title="医院简介"
             $Ajax('getHospitalInfo',{},(data)=>{
@@ -40,15 +37,16 @@ export default class extends React.Component{
         }
     }
     componentDidUpdate(){
-        iScroll = new scroll('.scroll-wrapper',{click:true})
+        iScroll = new scroll('.P22 .scroll-wrapper',{click:true})
     }
     render() {
-        let text=this.state.text;
+        let text=this.state.text,
+            state = this.props.location.state;
         return (<div className="body-wrap P22">      <div className="route-shade"></div>
             <div className="scroll-wrapper">
                 <ul className="scroll">
                     <img src={text.hosPic || text.departmentPic}/>
-                    <h3>{this.props.match.params.type == "chaxun-dep" ? "科室简介" : "医院简介"}</h3>
+                    <h3>{state && state.type == "chaxun-dep" ? "科室简介" : "医院简介"}</h3>
                     <p>{text.introduce}</p>
                 </ul>
             </div>

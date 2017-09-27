@@ -67,7 +67,7 @@ const guahaoInf = (state={
 guahaoInf.tomorrow = () => {
     let date = new Date();
     date.setDate(date.getDate()+1);
-    return date;
+    return $parseDate(date)
 }
 
 const todoApp = combineReducers({

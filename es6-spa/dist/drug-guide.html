@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 <meta name="format-detection" content="telephone=no">
-<title>用药提醒</title>
+<title></title>
 <script>document.getElementsByTagName('html')[0].style.fontSize=document.documentElement.clientWidth/7.5+'px';</script>
 <style>
 body, html, div, blockquote, img, label, p, h1, h2, h3, h4, h5, h6, pre, ul, ol,li, dl, dt, dd, form, a, fieldset, input, th, td,textarea{margin: 0; padding: 0; border: 0; outline:none;font-size:14px; font-family:Arial,Microsoft Yahei; text-decoration:none}
@@ -20,22 +20,23 @@ h2{color: #232323;font-size: 15px;line-height: 22px;margin: 0 .2rem}
 h3{color: #666666;font-size: 15px;line-height: 22px;margin: 0 .2rem}
 .drug-wrap{margin:.3rem .2rem}
 .drug-wrap p{height: .6rem;line-height: .6rem;background-color: #8064a1;color: #FFFFFF;font-weight: bold;text-align: center}
-.drug-wrap table{border-collapse: collapse;border: 1px solid #e0d9e6;}
+.drug-wrap table{border-collapse: collapse;border: 1px solid #e0d9e6;width: 100%}
 td{width: 70%;text-align:justify;padding: 5px;color: #393939}
 tr:nth-of-type(2n) td{background-color: #e6e0ec}
 .td-1{border-right: 1px solid #e0d9e6;width: 30%;color: #999999}
+#tip-wrap{display: none}
 #tip{border-top:.23rem solid #e6e6e6;padding:.2rem .3rem}
 #tip h4{font-size: 15px; margin-bottom: .2rem}
 #tip p{color: #666666}
-#tip p span{color:#7f167b}
+#tip p span{color:#7f167b;background: url("./img/qrcode-point.png")no-repeat right center;background-size: contain;padding-right: 10px}
 img{margin: 0 auto;display: block}
 </style>
 </head>
 <body>
-<h2>用药提醒小助手给您发提醒啦!</h2>
-<h3>您扫描的药袋对应药嘱药品简要信息如下:</h3>
+<h2></h2>
+<h3></h3>
 <div id="drug-wrap">
-    <div class="drug-wrap">
+    <!--<div class="drug-wrap">
         <p>药名</p>
         <table>
             <tr>
@@ -51,14 +52,176 @@ img{margin: 0 auto;display: block}
                 <td>1.忌辛辣、生冷、油腻食物。2.感冒发热病人不宜服用。3.本品宜饭前服用。4.高血压、心脏病、肝病、糖尿病、肾病等慢性病患者应在医师指导下服用。</td>
             </tr>
         </table>
+    </div>-->
+</div>
+<div id="tip-wrap">
+    <div id="tip">
+        <h4>提示</h4>
+        <p>1、以上信息均依药品说明书作简单摘要，不可作为用药指导，敬遵医嘱;<br/>
+            2、如有疑问，详询我院药剂科或拨打药物咨询热线010-56118555<br/>
+            3、需获得个性化用药提醒服务，请关注并绑定我院公众服务号。<span>详情请长按下方二维码：</span></p>
     </div>
+    <img src="img/qrcode.jpg" width="50%">
 </div>
-<div id="tip">
-    <h4>提示</h4>
-    <p>1、以上信息均依药品说明书作简单摘要，不可作为用药指导，敬遵医嘱;<br/>
-2、如有疑问，详询我院药剂科或拨打药物咨询热线010-56118555<br/>
-3、需获得个性化用药提醒服务，请关注并绑定我院公众服务号。<span>详情请长按下方二维码：</span></p>
-</div>
-<img src="img/qrcode.jpg" width="50%">
 </body>
+<script>
+var doc = document;
+
+function $Param(obj){
+    var arr=[];
+    for(var k in obj){
+        arr.push(k+'='+encodeURI(obj[k] instanceof Object ? JSON.stringify(obj[k]) : obj[k]));
+    }
+    return arr.join('&')
+}
+
+function $Parse(string){
+    var obj = new Object(),
+        strs,
+        arr = string.split("#");
+    for(var j=0;j<arr.length;j++){
+        var line = arr[j];
+        if (line.indexOf("?") != -1) {
+            line = line.substr(line.indexOf("?") + 1);
+            strs = line.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                var tempArr = strs[i].split("=");
+                obj[tempArr[0]] = tempArr[1];
+            }
+        }
+    }
+    return obj;
+}
+
+function $Ajax(url,obj,fn,fail){
+    ajax("post","http://yypt.btch.edu.cn/guahao/wx/"+url,$Param(obj),fn);
+    function ajax(method, url, data, success,err) {
+        var xhr = new XMLHttpRequest();
+        if (method == 'get' && data) {
+            url += '?' + data;
+        }
+        xhr.open(method,url,true);
+        if (method == 'get') {
+            xhr.send();
+        } else {
+            xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+            xhr.send(data);
+        }
+        xhr.onreadystatechange = function() {
+            if ( xhr.readyState == 4 ) {
+                if ( xhr.status == 200 ) {
+                    var data = eval("("+xhr.responseText+")");
+                    if(!data.success){
+                        fail ? fail() : alert(data.msg)
+                    }
+                    if(data.success && success) success( data );
+                } else {
+                    err && err();
+                }
+            }
+        }
+    }
+}
+
+function getMedicines() {
+    if($Parse(location.href).qrcode){
+        doc.title = "用药提醒"
+        doc.getElementsByTagName('h2')[0].innerText="用药提醒小助手给您发提醒啦!"
+        doc.getElementsByTagName('h3')[0].innerText="您扫描的药袋对应药嘱药品简要信息如下:"
+        doc.getElementById("tip-wrap").style.display="block"
+        $Ajax("qrcodeMedicationInfoGet",{
+            id:$Parse(window.location.href).id,
+            openId:$.openId
+        },function(data){
+            getMedicines.append(data)
+        })
+    }else{
+        doc.title = "用药查询"
+        doc.getElementsByTagName('h3')[0].innerText="您查询的对应药嘱药品简要信息如下:"
+        $Ajax("getUserMedication",{
+            openId:$.openId
+        },function(data){
+            getMedicines.append(data)
+        })
+    }
+}
+getMedicines.append=function(data){
+    if(!data.obj.length){
+        doc.getElementsByTagName('h3')[0].innerText="暂无可查询的用药信息"
+    }
+    var wrap = doc.getElementById("drug-wrap");
+    for(var i=0;i<data.obj.length;i++){
+        var d = data.obj[i],
+        ele = doc.createElement("div");
+        ele.className="drug-wrap";
+        ele.innerHTML=
+        '<p>'+d.medicationName+'</p>'+
+        '<table>'+
+            '<tr>'+
+                '<td class="td-1">就诊日期</td>'+
+                '<td>'+(d.visit_date || "")+'</td>'+
+            '</tr>'+
+            '<tr>'+
+                '<td class="td-1">临床用途</td>'+
+                '<td>'+(d.indication || "")+'</td>'+
+            '</tr>'+
+            '<tr>'+
+                '<td class="td-1">用法用量</td>'+
+                '<td>'+(d.dosingFrequency || "")+'<br/>每次'+(d.singleDose || "")+(d.singleDoseUnit || "")+'</td>'+
+            '</tr>'+
+            '<tr>'+
+                '<td class="td-1">注意事项</td>'+
+                '<td>'+(d.mattersNeedAttention || "")+'</td>'+
+            '</tr>'+
+            '<tr>'+
+                '<td class="td-1">医生备注</td>'+
+                '<td>'+(d.doctorRemark || "")+'</td>'+
+            '</tr>'+
+            '<tr>'+
+                '<td class="td-1">副作用</td>'+
+                '<td>'+(d.sideEffect || "")+'</td>'+
+            '</tr>'
+        '</table>'
+        wrap.appendChild(ele)
+    }
+}
+
+var $ = new Object();
+$.type=(function(){
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(/micromessenger/i.test(ua)){
+        return 1;                     //微信
+    }else if(/alipayclient/i.test(ua)){
+        return 2;                     //支付宝
+    }else{
+        return 2;
+    }
+})()
+if(localStorage.getItem('openId')){
+    $.openId =  localStorage.getItem('openId')
+    getMedicines()
+}else {
+    var ob = $Parse(window.location.href);
+    var environment = $.type;         //表明支付宝还是微信
+    var code = '';                    //授权code 在用户访问授权地址后返回
+    if (environment == 1) {             //环境不同code的key不同，获取授权code
+        code = ob.code;
+    } else {
+        code = ob.auth_code;
+    }
+    $Ajax('userInfoGetSuper', {
+        environment: environment,
+        code: code ? code : '',
+        returnUrl: code ? '' : encodeURIComponent(window.location.href)
+    }, function (data) {
+        if (!code) {
+            window.location.href = decodeURIComponent(data.obj.codeUrl);  //跳转到授权地址授权
+        } else {                                      //如果授权完成，即为获取用户信息
+            $.openId = data.obj.userId;
+            localStorage.setItem('openId', $.openId);
+            getMedicines()
+        }
+    })
+}
+</script>
 </html>

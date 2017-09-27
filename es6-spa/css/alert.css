@@ -1,0 +1,7 @@
+.alert-shade{z-index: 1;position: absolute;top:0;width: 100%;height: 100%;background-color: rgba(0,0,0,.5);}
+#alert-wrap{position: absolute;min-height: 3.8rem;width: 6rem;top:50%;left: 50%;padding:.2rem .3rem 1.1rem;margin: -1.9rem 0 0 -3rem;background-color: #ffffff;border-radius: 4px;}
+#alert-wrap h3{font-size: 17px;text-align: center;margin-top: .25rem;line-height: .54rem}
+#alert-wrap p{margin: .25rem .4rem;font-size: 15px;}
+#alert-wrap ul{position: absolute;bottom: 0;left:0;border-top: 1px solid #ebebeb;width: 6rem}
+#alert-wrap ul li{width: 50%;float: left;text-align: center;line-height: .9rem;font-size: 16px}
+#alert-wrap ul #alert-true{border-left: 1px solid #ebebeb;color: #7f167b  }

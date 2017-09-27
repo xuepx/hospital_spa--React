@@ -8,6 +8,7 @@ import scroll from 'iscroll';
 import DateSelector from '../../js/picker/date-picker';
 import MultiPicker from '../../js/picker/multi-picker';
 import { $,$Ajax,$Param,$Next,$checkPhone } from '../../js/common';
+import Alert from '../alert/alert.jsx';
 
 let iScroll,timer,Dispatch;
 
@@ -16,7 +17,9 @@ let iScroll,timer,Dispatch;
 )
 export default class extends React.Component{
     state={
-        countDown:"获取验证码"
+        countDown:"获取验证码",
+        ALERT:false,
+        alertContent:""
     }
     constructor(props){
         super(props)
@@ -24,7 +27,7 @@ export default class extends React.Component{
         document.title="填写注册信息"
     }
     componentDidMount(){
-        iScroll = new scroll('.scroll-wrapper',{click:true})
+        iScroll = new scroll('.P23 .scroll-wrapper',{click:true})
         let nowTime=new Date();
         new DateSelector({ 
             input:"choose-date",
@@ -81,34 +84,47 @@ export default class extends React.Component{
             key = type;
         Dispatch(action.setInf(key,val))
     }
+    alert(text){
+        this.setState({
+            alertContent:text,
+            ALERT:true
+        });
+    }
+    alertYes(){
+        this.setState({
+            ALERT:false
+        });
+    }
     registerConfirm(){
         let { loginInf } = this.props;
         if( !loginInf.name ){
-            alert("请填写姓名");   return;
+            this.alert("请填写姓名");  return;
         }else if( loginInf.sex == "请选择性别" ){
-            alert("请选择性别");   return;
+            this.alert("请选择性别");  return;
         }else if( loginInf.birth == "请选择生日" ){
-            alert("请选择生日");   return;
+            this.alert("请选择生日");   return;
         }else if( !loginInf.identity.id ){
-            alert("请选择证件类型");   return;
+            this.alert("请选择证件类型");   return;
         }else if( !loginInf.idNum ){
-            alert("请填写证件号");   return;
+            this.alert("请填写证件号");   return;
+        }else if( loginInf.identity.id==1 && loginInf.idNum.length<18 ){
+            this.alert("请填写正确18位身份证号");   return;
         }else if( loginInf.marry == "请选择婚姻状况" ){
-            alert("请选择婚姻状况");   return;
+            this.alert("请选择婚姻状况");   return;
         }else if( !loginInf.province.id ){
-            alert("请选择省");   return;
+            this.alert("请选择省");   return;
         }else if( !loginInf.city.id ){
-            alert("请选择市");   return;
+            this.alert("请选择市");   return;
         }else if( !loginInf.county.id ){
-            alert("请选择县/辖区");   return;
+            this.alert("请选择县/辖区");   return;
         }else if( !loginInf.stay ){
-            alert("请填写详细地址");   return;
+            this.alert("请填写详细地址");   return;
         }else if( !(loginInf.password.length>=6) ){
-            alert("密码必须大于等于6位数");   return;
+            this.alert("密码必须大于等于6位数");   return;
         }else if( !$checkPhone(loginInf.tel) ){
-            alert("请填写正确手机号");   return;
+            this.alert("请填写正确手机号");   return;
         }else if( !loginInf.code ){
-            alert("请填写验证码");   return;
+            this.alert("请填写验证码");   return;
         }
         $Ajax("checkMobileMsgCode",{
             phoneNumber:loginInf.tel,
@@ -154,11 +170,11 @@ export default class extends React.Component{
     getCode(){
         if(timer)return
         if(!$checkPhone(this.props.loginInf.tel)){
-            alert("请输入正确的手机号码！")
+            this.alert("请输入正确的手机号码！")
             return
         }
         $Ajax("getMobileMsgCode",{
-            phoneNumber:this.state.tel
+            phoneNumber:this.props.loginInf.tel
         },(data)=>{
             timer = setInterval(()=>{
                 let time = parseInt(this.state.countDown);
@@ -182,18 +198,10 @@ export default class extends React.Component{
         return (<div className="body-wrap P23"> <div className="route-shade"></div>
             <div className="scroll-wrapper">
                 <ul className="scroll">
-                    <div>
+                    <div className="wrap1">
                         <li>
                             <p>姓名</p>
                             <input placeholder="请填写就诊人真实姓名" value={loginInf.name} onChange={this.setInf.bind(this,"name")} />
-                        </li>
-                        <li className="choose">
-                            <p>性别</p>
-                            <span id="choose-sex">{loginInf.sex}</span>
-                        </li>
-                        <li className="choose">
-                            <p>生日</p>
-                            <span id="choose-date">{loginInf.birth}</span>
                         </li>
                         <li className="choose">
                             <p>证件类型</p>
@@ -202,6 +210,14 @@ export default class extends React.Component{
                         <li>
                             <p>证件号码</p>
                             <input placeholder="请填写就诊人有效证件号码" type="number" value={loginInf.idNum} onChange={this.setInf.bind(this,"idNum")} />
+                        </li>
+                        <li className="choose">
+                            <p>性别</p>
+                            <span id="choose-sex">{loginInf.sex}</span>
+                        </li>
+                        <li className="choose">
+                            <p>生日</p>
+                            <span id="choose-date">{loginInf.birth}</span>
                         </li>
                         <li className="choose">
                             <p>婚姻状况</p>
@@ -226,13 +242,13 @@ export default class extends React.Component{
                             <input placeholder="请填写详细地址" value={loginInf.stay} onChange={this.setInf.bind(this,"stay")} />
                         </li>
                     </div>
-                    <div>
+                    <div className="wrap1">
                         <li>
                             <p>密码</p>
                             <input placeholder="请输入注册密码" type="password"  value={loginInf.password} onChange={this.setInf.bind(this,"password")} />
                         </li>
                     </div>
-                    <div>
+                    <div className="wrap1">
                         <li>
                             <p>手机号</p>
                             <input placeholder="请输入就诊人手机号" type="number" value={loginInf.tel} onChange={this.setInf.bind(this,"tel")} />
@@ -242,9 +258,15 @@ export default class extends React.Component{
                             <input id="test-code" placeholder="请输入验证码"  value={this.state.code} onChange={this.setInf.bind(this,"code")} />
                         </li>
                     </div>
+
+                    <div id="tip-wrap">
+                        <span id="excuse">注意：</span>
+                        <span id="excuse-text">网上预约挂号实行实名制，请您如实提供就诊人员的真实姓名、有效证件号、性别、电话、手机号码等，已确保能够正常取号及看诊。</span>
+                    </div>
                 </ul>
             </div>
             <a href="javascripy:;" id="submit" onClick={this.registerConfirm.bind(this)}>立即注册</a>
+            {this.state.ALERT && <Alert yes={this.alertYes.bind(this)} content={this.state.alertContent} />}
             <div id="select-1"></div>
             <div id="select-2"></div>
             <div id="select-3"></div>

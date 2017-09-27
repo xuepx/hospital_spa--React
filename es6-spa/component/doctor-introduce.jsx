@@ -11,7 +11,7 @@ export default class extends React.Component{
         document.title="医生介绍"
     }
     componentDidMount(){
-        iScroll = new scroll('.scroll-wrapper',{click:true})
+        iScroll = new scroll('.P25 .scroll-wrapper',{click:true})
     }
     docLevel(id){
         switch(Number(id)){
@@ -42,10 +42,12 @@ export default class extends React.Component{
                             </p>
                         </div>
                     </li>
+                    <h3>医生特长</h3>
+                    <p className="detail">{item.doctorExpertise || "暂无介绍"}</p>
                     <h3>教育背景</h3>
                     <p className="detail">{item.docEducational || "暂无介绍"}</p>
-                    <h3>医生简介</h3>
-                    <p className="detail">{item.doctorExpertise || "暂无介绍"}</p>
+                    <h3>工作经历</h3>
+                    <p className="detail">{item.docExperience || "暂无介绍"}</p>
                     <h3>研究方向</h3>
                     <p className="detail">{item.docResearch || "暂无介绍"}</p>
                     <h3>学术职务</h3>

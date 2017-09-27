@@ -16,7 +16,7 @@ export default class extends React.Component{
         shadeAct:false,
         chooseBigDepartName:'',
         bigDepart:[],
-        smallDepart:[]
+        smallDepart:[]  
     }
     constructor(props){
         super(props)
@@ -50,7 +50,7 @@ export default class extends React.Component{
         })
     }
     componentDidMount(){
-        iScroll = new scroll('.scroll-wrapper',{click:true})
+        iScroll = new scroll('.P20 .scroll-wrapper',{click:true})
     }
     componentDidUpdate(){
         if(this.state.shadeAct){
@@ -67,12 +67,15 @@ export default class extends React.Component{
     closeShade(){
         this.setState({shadeAct:false})
     }
-    toDoctorList(id){
-        this.props.dispatch(guahao("departId",id))
+    toDoctorList(item){
+        this.props.dispatch(guahao("departId",item.outDepId))
         $Next();
         this.props.history.push({
             pathname: origin.toPath,
-            state:"chaxun-dep"
+            state: {
+                type:"chaxun-dep",
+                item:item
+            }
         })
     }
     render() {
@@ -84,7 +87,7 @@ export default class extends React.Component{
         }),
         items2 = this.state.smallDepart.map((item,i)=>{
             return (
-                <li key={item.outDepId} onClick={this.toDoctorList.bind(this,item.outDepId)}><span>{item.outDepName}</span></li>
+                <li key={item.outDepId} onClick={this.toDoctorList.bind(this,item)}><span>{item.outDepName}</span></li>
             )
         }),
         shadeList;

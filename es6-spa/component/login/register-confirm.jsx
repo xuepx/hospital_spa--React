@@ -3,6 +3,7 @@ import React from 'react';
 import scroll from 'iscroll';
 import { connect } from 'react-redux';
 import { $,$Ajax,$Param,$Next } from '../../js/common';
+import Alert from '../alert/alert.jsx';
 
 let iScroll;
 
@@ -13,9 +14,24 @@ export default class extends React.Component{
     constructor(){
         super()
         document.title="确认注册信息"
+        this.state={
+            ALERT:false,
+            alertContent:""
+        }
     }
     componentDidMount(){
-        iScroll = new scroll('.scroll-wrapper',{click:true})
+        iScroll = new scroll('.P24 .scroll-wrapper',{click:true})
+    }
+    alert(text){
+        this.setState({
+            alertContent:text,
+            ALERT:true
+        });
+    }
+    alertYes(){
+        this.setState({
+            ALERT:false
+        });
     }
     submit(){
         let { loginInf } = this.props;
@@ -36,6 +52,7 @@ export default class extends React.Component{
         },(data)=>{
             localStorage.setItem("userId",data.obj.userId)
             localStorage.setItem("userName",loginInf.name)
+            this.alert('注册成功')
             this.props.history.go(-2)
         })
     }
@@ -89,6 +106,7 @@ export default class extends React.Component{
                 </ul>
             </div>
             <a href="javascripy:;" id="submit" onClick={this.submit.bind(this)}>提交注册</a>
+            {this.state.ALERT && <Alert yes={this.alertYes.bind(this)} content={this.state.alertContent} />}
         </div>)
     }
 }

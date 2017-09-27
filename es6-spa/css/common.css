@@ -214,3 +214,26 @@ footer p{color: #8F8F8F;line-height: .4rem;text-align: center;font-size: 12px}
     opacity: 0;
     transition:.25s;
 }
+
+/*alert*/
+.alert-enter {
+    background-color: rgba(0,0,0,0) !important;
+}
+.alert-enter.alert-enter-active {
+    background-color: rgba(0,0,0,.5) !important;
+    transition: .3s
+}
+.alert-enter #alert-wrap{
+    transform: scale(1.4,1.1);
+}
+.alert-enter.alert-enter-active #alert-wrap{
+    transform: scale(1,1);
+    transition: .3s
+}
+.alert-leave {
+    opacity: 1;
+}
+.alert-leave.alert-leave-active {
+    opacity: 0;
+    transition:.18s;
+}

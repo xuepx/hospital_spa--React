@@ -1,0 +1,7 @@
+.P13 .wrap{margin: .2rem;background-color: #FFFFFF;padding-left:.3rem}
+.P13 h3{font-weight: 500;line-height: .9rem;border-bottom: 2px dashed #dcdcdc}
+.P13 .wrap-1{margin-top: .2rem}
+.P13 .wrap-1 p{line-height: .5rem;color: #666666}
+.P13 .wrap-2{overflow: hidden}
+.P13 .wrap-2 p{float: left;line-height: .9rem;color: #232323;font-size: 16px;}
+.P13 .wrap-2 span{float: right;line-height: .54rem;border: 1px solid #dcdcdc;padding: 0 15px;border-radius: 4px;margin: .18rem .2rem 0 0;color: #7F167B}

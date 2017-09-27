@@ -47,7 +47,7 @@ function init(){
 
 //config
 var $=new Object()
-$.reqHost='http://192.168.11.49:8452/guahao/wx/' || 'http://123.59.26.153:8088/guahao/wx/'
+$.reqHost='http://yypt.btch.edu.cn/guahao/wx/'
 $.area=[]
 $.org=[]
 $.urlObj=$Parse(decodeURI(window.location.href))

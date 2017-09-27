@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { guahao } from '../store/actions';
 import scroll from 'iscroll';
 import { $,$Ajax,$checkPhone,$Next } from '../js/common'
+import Alert from './alert/alert.jsx';
 
 let iScroll,timer;
 
@@ -15,7 +16,10 @@ export default class extends React.Component{
         newPasswordConfirm:"",
         tel:"",
         code:"",
-        countDown:"获取验证码"
+        countDown:"获取验证码",
+        alertContent:"",
+        alertFn:null,
+        ALERT:false
     }
     constructor(props){
         super(props)
@@ -26,6 +30,22 @@ export default class extends React.Component{
             case 1: document.title="重置密码" ;break;
         }
     }
+    componentDidMount(){
+        iScroll = new scroll('.P14 .scroll-wrapper',{click:true})
+    }
+    alert(text,fn){
+        this.setState({
+            alertContent:text,
+            alertFn:fn || null,
+            ALERT:true
+        });
+    }
+    alertYes(fn){
+        this.setState({
+            ALERT:false
+        });
+        if(fn)fn()
+    }
     setInf(key,e){
         let val = e.target.value
         this.setState({[key]:val})
@@ -33,7 +53,7 @@ export default class extends React.Component{
     getCode(){
         if(timer)return
         if(!$checkPhone(this.state.tel)){
-            alert("请输入正确的手机号码！")
+            this.alert("请输入正确的手机号码！")
             return
         }
         $Ajax("getMobileMsgCode",{
@@ -67,51 +87,55 @@ export default class extends React.Component{
         }
         if(type==2){
             if( !this.state.oldPassword ){
-                alert("请输入原始密码");   return;
+                this.alert("请输入原始密码");   return;
             }else if( !this.state.newPassword ){
-                alert("请输入新密码");   return;
+                this.alert("请输入新密码");   return;
             }else if( !this.state.newPasswordConfirm ){
-                alert("请再次输入新密码");   return;
+                this.alert("请再次输入新密码");   return;
             }else if( !$checkPhone(this.state.tel) ){
-                alert("请输入正确手机号");   return;
+                this.alert("请输入正确手机号");   return;
             }else if( !this.state.code ){
-                alert("请输入验证码");   return;
+                this.alert("请输入验证码");   return;
             }
             if(this.state.newPassword != this.state.newPasswordConfirm){
-                alert("两次输入密码不一致！")
+                this.alert("两次输入密码不一致！")
                 return;
             }
             checkCode(() => {
                 $Ajax("updatePassword",{
+                    openId:$.openId,
                     phoneNumber:this.state.tel,
                     password : this.state.oldPassword,
                     newPassword : this.state.newPassword
                 },(data)=>{
-                    alert(data.msg)
-                    this.props.history.go(-1)
+                    this.alert(data.msg,()=>{
+                        this.props.history.go(-1)
+                    })
                 })
             })
         }else if(type==3){
             if( !this.state.newPassword ){
-                alert("请输入新密码");   return;
+                this.alert("请输入新密码");   return;
             }else if( !this.state.newPasswordConfirm ){
-                alert("请再次输入新密码");   return;
+                this.alert("请再次输入新密码");   return;
             }else if( !$checkPhone(this.state.tel) ){
-                alert("请输入正确手机号");   return;
+                this.alert("请输入正确手机号");   return;
             }else if( !this.state.code ){
-                alert("请输入验证码");   return;
+                this.alert("请输入验证码");   return;
             }
             if(this.state.newPassword != this.state.newPasswordConfirm){
-                alert("两次输入密码不一致！")
+                this.alert("两次输入密码不一致！")
                 return;
             }
             checkCode(() => {
                 $Ajax("setPassword",{
+                    openId:$.openId,
                     phoneNumber:this.state.tel,
                     password : this.state.newPassword
                 },(data)=>{
-                    alert(data.msg)
-                    this.props.history.go(-1)
+                    this.alert(data.msg,()=>{
+                        this.props.history.go(-1)
+                    })
                 })
             })
         }
@@ -154,18 +178,23 @@ export default class extends React.Component{
             </ul>)
         }
         return (<div className="body-wrap P14">      <div className="route-shade"></div>
-            <div>
-                {items}
-                <li>
-                    <p>手机号</p>
-                    <input placeholder="请输入就诊人手机号" type="number" value={this.state.tel} onChange={this.setInf.bind(this,"tel")} />
-                </li>
-                <li id="last">
-                    <span id="get-code" onClick={this.getCode.bind(this)}>{this.state.countDown}</span>
-                    <input id="test-code" placeholder="请输入验证码"  value={this.state.code} onChange={this.setInf.bind(this,"code")} />
-                </li>
+            <div className="scroll-wrapper">
+                <div className="scroll">
+                    <div className="wrap1">
+                        {items}
+                        <li>
+                            <p>手机号</p>
+                            <input placeholder="请输入就诊人手机号" type="number" value={this.state.tel} onChange={this.setInf.bind(this,"tel")} />
+                        </li>
+                        <li id="last">
+                            <span id="get-code" onClick={this.getCode.bind(this)}>{this.state.countDown}</span>
+                            <input id="test-code" placeholder="请输入验证码"  value={this.state.code} onChange={this.setInf.bind(this,"code")} />
+                        </li>
+                    </div>
+                    <a id="bind" onClick={this.toBind.bind(this,state.type)}>{state.submit}</a>
+                </div>
             </div>
-            <a id="bind" onClick={this.toBind.bind(this,state.type)}>{state.submit}</a>
+            {this.state.ALERT && <Alert yes={this.alertYes.bind(this,this.state.alertFn)} content={this.state.alertContent} />}
         </div>)
     }
 }

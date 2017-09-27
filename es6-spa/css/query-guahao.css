@@ -3,8 +3,9 @@
 .P16 .doc-img{display:block;float:left;border-radius: 50%;width: 1.2rem;height: 1.2rem;margin: .27rem .3rem;background:url('../img/photo.png')no-repeat center;background-size:cover;}
 .P16 .doclist-wrap{padding:.3rem .6rem .2rem 0;float: left;}
 .P16 .doclist-wrap p{min-height: .4rem;width: 3.8rem;}
+.P16 .wrap1{white-space: nowrap}
 .P16 .wrap2{margin: .05rem 0 .025rem;color: #888888;padding:.05rem 0 0 .4rem;background: url("../img/clock.png")no-repeat left center;background-size: auto .3rem}
-.P16 .wrap1 h4{font-size: 18px;line-height: 18px;padding-right: .2rem;display: inline-block}
+.P16 .wrap1 h4{font-size: 18px;line-height: 18px;display: inline-block}
 .P16 .wrap1 span{padding:0 .2rem;border-right: 1px solid #a1a0a0;line-height: 15px;display: inline-block;color: #888888}
 .P16 .wrap1 span:nth-last-of-type(1){border: none}
 .P16 .wrap3{color: #888888;line-height: 20px}

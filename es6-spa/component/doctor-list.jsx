@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { guahao } from '../store/actions';
 import scroll from 'iscroll';
 import { $,$Ajax,$Param,$Next } from '../js/common'
+import Alert from './alert/alert.jsx';
 
 let iScroll;
 
@@ -12,22 +13,39 @@ let iScroll;
 )
 export default class extends React.Component{
     state = {
-        docList:[]
+        docList:[],
+        alert:false,
+        alertContent:""
     }
     constructor(){
         super()
         document.title="医生列表"
+    }
+    alert(text){
+        this.setState({
+            alertContent:text,
+            ALERT:true
+        });
+    }
+    alertYes(){
+        this.setState({
+            ALERT:false
+        });
     }
     componentWillMount(){
         $Ajax('getDoctorList',{
             outDepId:this.props.guahaoInf.departId
         },(data)=>{
             this.setState({docList:data.obj})
-            setTimeout(()=>{if(!data.obj.length)alert("该科室暂无医生介绍")},300)
+            setTimeout(()=>{
+                if(!data.obj.length){
+                    this.alert("该科室暂无医生介绍")
+                }
+            },300)
         })
     }
     componentDidUpdate(){
-        iScroll = new scroll('.scroll-wrapper',{click:true})
+        iScroll = new scroll('.P21 .scroll-wrapper',{click:true})
     }
     toDoctorList(item){
         $Next()
@@ -76,6 +94,7 @@ export default class extends React.Component{
                     {items}
                 </ul>
             </div>
+            {this.state.ALERT && <Alert yes={this.alertYes.bind(this)} content={this.state.alertContent} />}
         </div>)
     }
 }

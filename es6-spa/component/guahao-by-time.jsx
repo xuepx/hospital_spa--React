@@ -8,6 +8,7 @@ import Calendar from '../js/picker/calendar';
 import scroll from 'iscroll';
 import { $,$Ajax,$Param,$Next } from '../js/common';
 import Login from './login/login.jsx';
+import Alert from './alert/alert.jsx';
 
 let iScroll,Dispatch;
 
@@ -17,6 +18,8 @@ let iScroll,Dispatch;
 export default class extends React.Component{
     state = {
         loginDisplay:false,
+        alertContent:"",
+        ALERT:false,
         docList:[]
     }
     constructor(props){ 
@@ -25,18 +28,19 @@ export default class extends React.Component{
         document.title="预约挂号(选择医生)"
     }
     componentWillMount(){
-        setTimeout(() => this.getDocList(),300)
+        this.getDocList()
     }
     componentDidMount(){
-        let _this=this,today = new Date(),startDay=new Date(),endDay = new Date();
-            startDay.setDate(today.getDate()+1)
-            endDay.setDate(today.getDate()+28)
+        let _this=this,today = new Date(),startDay=new Date(),endDay = new Date(),
+            chooseTime = new Date(this.props.guahaoInf.time);
+            startDay.setDate(today.getDate()+1);
+            endDay.setDate(today.getDate()+28);
         new Calendar({
             container: 'calendar',
             isMask: false,
             beginTime: [startDay.getFullYear(), startDay.getMonth()+1, startDay.getDate()],
             endTime: [endDay.getFullYear(), endDay.getMonth()+1, endDay.getDate()],
-            recentTime: [startDay.getFullYear(), startDay.getMonth()+1, startDay.getDate()],
+            recentTime: [chooseTime.getFullYear(), chooseTime.getMonth()+1, chooseTime.getDate()],
             isSundayFirst: true,
             isShowNeighbor: true, 
             isToggleBtn: true,
@@ -44,7 +48,7 @@ export default class extends React.Component{
             monthType: 1,
             canViewDisabled: false,
             beforeRenderArr: [{
-                stamp: new Date(startDay.getFullYear(),startDay.getMonth(), startDay.getDate()).getTime(),
+                stamp: new Date(chooseTime.getFullYear(),chooseTime.getMonth(), chooseTime.getDate()).getTime(),
                 className: 'calendar-active',
             }],
             success: function (item, arr, cal) {
@@ -57,13 +61,13 @@ export default class extends React.Component{
                     chooseDay[i].classList.add('calendar-active')
                 }
                 Dispatch(guahao('time',item))
-                _this.getDocList()
+                setTimeout(_this.getDocList.bind(_this),0)
             },
             switchRender: function (year, month, cal) {
                 iScroll.refresh()
             }
         });
-        iScroll = new scroll('.scroll-wrapper',{click:true})
+        iScroll = new scroll('.P18 .scroll-wrapper',{click:true})
     }
     componentDidUpdate(){
         iScroll.refresh();
@@ -75,10 +79,14 @@ export default class extends React.Component{
             regDate:this.props.guahaoInf.time
         },(data)=>{
             this.setState({docList:data.obj})
+        },(data)=>{
+            this.alert("未获取到排班记录")
         })
     }
     closeLoginThen(){
-        this.setState({loginDisplay:false})
+        this.setState({loginDisplay:false},()=>{
+            this.alert("登录成功")
+        })
     }
     timeType(id){
         switch(Number(id)){
@@ -87,11 +95,22 @@ export default class extends React.Component{
             case 3 : return "晚上";
         }
     }
+    alert(text){
+        this.setState({
+            alertContent:text,
+            ALERT:true
+        });
+    }
+    alertYes(){
+        this.setState({
+            ALERT:false
+        });
+    }
     toConfirm(item){
         if(!localStorage.getItem("userId")){
             this.setState({loginDisplay:true})
         }else if(Number(item.regleaveCount)<=0){
-            alert("该时段已无可挂号源")
+            this.alert("该时段已无可挂号源")
         }else{
             $Next();
             this.props.history.push({
@@ -147,6 +166,8 @@ export default class extends React.Component{
             <ReactCSSTransitionGroup transitionName="login">
                 {login()}
             </ReactCSSTransitionGroup>
+
+            {this.state.ALERT && <Alert yes={this.alertYes.bind(this)} content={this.state.alertContent} />}
         </div>)
     }
 }

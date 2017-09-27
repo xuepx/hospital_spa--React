@@ -4,23 +4,50 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import scroll from 'iscroll';
 import { $,$Ajax,$Param } from '../js/common'
 import Login from './login/login.jsx';
+import Alert from './alert/alert.jsx';
 
 let iScroll;
 
 export default class extends React.Component{
     state = {
         loginDisplay:false,
-        guahaoList:[]
+        guahaoList:[],
+        ALERT:false,
+        alertCancel:false,
+        alertContent:"",
+        alertTitle:"",
+        alertFn:null
     }
     constructor(){
         super()
         document.title="挂号记录查询"
     }
     componentWillMount(){
-        setTimeout(() => this.getGuahaoList(),300)
+        this.getGuahaoList()
     }
     componentDidUpdate(){
-        iScroll = new scroll('.scroll-wrapper',{click:true})
+        iScroll = new scroll('.P16 .scroll-wrapper',{click:true})
+    }
+    alert(text,title,cancel,fn){
+        if(this.state.ALERT)return;
+        this.setState({
+            alertContent:text,
+            alertCancel:cancel || false,
+            alertTitle:title || "",
+            alertFn:fn || null,
+            ALERT:true
+        });
+    }
+    alertYes(fn){
+        this.setState({
+            ALERT:false
+        });
+        if(fn)fn()
+    }
+    alertNo(){
+        this.setState({
+            ALERT:false
+        });
     }
     getGuahaoList(){
         if(!localStorage.getItem("userId")){
@@ -30,28 +57,27 @@ export default class extends React.Component{
                 userId:localStorage.getItem("userId")
             },(data)=>{
                 this.setState({guahaoList:data.obj})
-                if(!data.obj.length)alert("暂无挂号记录")
+                if(!data.obj.length){
+                    this.alert("暂无挂号记录")
+                }
             })
         }
     }
     cancel(item){
-        if(confirm("确认取消"+item.registerTime+" "+item.appointTime+" "+item.outdepName+" "+item.docName+item.fanghaoType+"的预约吗？")){
+        this.alert("确认取消"+item.registerTime+" "+item.appointTime+" "+item.outdepName+" "+item.docName+item.fanghaoType+"的预约吗？","取消确认",true,()=>{
             $Ajax('cancelGuaHao',{
                 userId:localStorage.getItem("userId"),
                 ghId:item.ghId
             },(data)=>{
-                alert("取消成功")
-                this.state.guahaoList.forEach((val,i)=>{
-                    if(item.ghId==val.ghId){
-                        this.state.guahaoList.splice(i,1)
-                    }
-                })
-                this.setState({guahaoList:this.state.guahaoList})
+                this.alert("取消成功");
+                this.getGuahaoList()
             })
-       }
+        })
     }
     closeLoginThen(){
-        this.setState({loginDisplay:false})
+        this.setState({loginDisplay:false},()=>{
+            this.alert("登录成功")
+        })
         this.getGuahaoList()
     }
     docLevel(id){
@@ -66,7 +92,7 @@ export default class extends React.Component{
         let items=this.state.guahaoList.map((item,i)=>{
             let {ampm,appointTime,docName,fanghaoType,ghId,outdepName,regFee,registerTime} = item
             return (
-                <li className="doc-list clearfix">
+                <li key={ghId} className="doc-list clearfix">
                     <span className="doc-img"></span>
                     <div className="doclist-wrap">
                         <p className="wrap1">
@@ -81,7 +107,7 @@ export default class extends React.Component{
                             挂号费用：<span>{regFee}元</span>
                         </p>
                     </div>
-                    <a className="cancel" onClick={this.cancel.bind(this,item)}>取消预约</a>
+                    <span className="cancel" onClick={this.cancel.bind(this,item)}>取消预约</span>
                 </li>
             )
         });
@@ -99,6 +125,13 @@ export default class extends React.Component{
             <ReactCSSTransitionGroup transitionName="login">
                 {login}
             </ReactCSSTransitionGroup>
+
+            {   this.state.ALERT && <Alert
+                yes={this.alertYes.bind(this,this.state.alertFn)}
+                no={this.state.alertCancel ? this.alertNo.bind(this) : null}
+                content={this.state.alertContent}
+                title={this.state.alertTitle} />
+            }
 
             <footer><p>{$.copyright}</p></footer>
         </div>)

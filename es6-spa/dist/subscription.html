@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<title></title>
+<script>document.getElementsByTagName('html')[0].style.fontSize=document.documentElement.clientWidth/7.5+'px';</script>
+<style>
+body, html, div, blockquote, img, label, p, h1, h2, h3, h4, h5, h6, pre, ul, ol,li, dl, dt, dd, form, a, fieldset, input, th, td,textarea{margin: 0; padding: 0; border: 0; outline:none;font-size:14px; font-family:Arial,Microsoft Yahei; text-decoration:none}
+*{box-sizing: border-box;}
+ul,ol,li{list-style: none;color: #333333}
+b,i{ font-style:normal; font-weight:normal}
+html,body{height: 100%;background-color: #f0f0f5}
+
+.wrap{margin: .2rem;background-color: #FFFFFF;padding-left:.3rem}
+h3{font-weight: 500;line-height: .9rem;border-bottom: 2px dashed #dcdcdc}
+.wrap-1{margin-top: .2rem}
+.wrap-1 p{line-height: .5rem;color: #666666}
+.wrap-2{overflow: hidden}
+.wrap-2 p{float: left;line-height: .9rem;color: #232323;font-size: 16px;}
+.wrap-2 span{float: right;line-height: .54rem;border: 1px solid #dcdcdc;padding: 0 15px;border-radius: 4px;margin: .18rem .2rem 0 0;color: #7F167B}
+</style>
+<script>
+var doc = document;
+function $Parse(string){
+    var obj = new Object(),
+            strs,
+            arr = string.split("#");
+    for(var j=0;j<arr.length;j++){
+        var line = arr[j];
+        if (line.indexOf("?") != -1) {
+            line = line.substr(line.indexOf("?") + 1);
+            strs = line.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                var tempArr = strs[i].split("=");
+                obj[tempArr[0]] = tempArr[1];
+            }
+        }
+    }
+    return obj;
+}
+function $Param(obj){
+    var arr=[];
+    for(var k in obj){
+        arr.push(k+'='+encodeURI(obj[k] instanceof Object ? JSON.stringify(obj[k]) : obj[k]));
+    }
+    return arr.join('&')
+}
+function $Ajax(url,obj,fn,fail){
+    ajax("post","http://yypt.btch.edu.cn/guahao/wx/"+url,$Param(obj),fn);
+    function ajax(method, url, data, success,err) {
+        var xhr = new XMLHttpRequest();
+        if (method == 'get' && data) {
+            url += '?' + data;
+        }
+        xhr.open(method,url,true);
+        if (method == 'get') {
+            xhr.send();
+        } else {
+            xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+            xhr.send(data);
+        }
+        xhr.onreadystatechange = function() {
+            if ( xhr.readyState == 4 ) {
+                if ( xhr.status == 200 ) {
+                    var data = eval("("+xhr.responseText+")");
+                    if(!data.success){
+                        fail ? fail() : alert(data.msg)
+                    }
+                    if(data.success && success) success( data );
+                } else {
+                    err && err();
+                }
+            }
+        }
+    }
+}
+</script>
+</head>
+<body>
+    <ul>
+        <li class="wrap">
+            <h3>温馨提醒您，按时服药哦！</h3>
+            <div class="wrap-1">
+                <p>药品名称：</p>
+                <p>服用方式：</p>
+                <p>服用剂量：</p>
+                <p>服用时间：</p>
+            </div>
+            <div class="wrap-2">
+                <p>祝您早日康复！</p>
+                <span id="cancel">取消订阅</span>
+            </div>
+        </li>
+    </ul>
+</body>
+<script>
+var dataObj = $Parse(window.location.href);
+doc.getElementsByClassName("wrap-1")[0].innerHTML=
+        "<p>药品名称："+dataObj.drugName+"</p>"+
+        "<p>服用方式："+dataObj.drugUse+"</p>"+
+        "<p>服用剂量："+dataObj.amount+dataObj.amountUnit+"</p>"+
+        "<p>服用时间："+dataObj.scheduledTime+"</p>";
+
+doc.getElementById("cancel").addEventListener("click",function(){
+    if(confirm("确定取消订阅用药提醒吗？")){
+        $Ajax("cancelSubscription",{
+            mrfId:dataObj.mrfId
+        },function(data){
+            alert(data.msg)
+        })
+    }
+},false)
+</script>
+</html>
